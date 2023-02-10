@@ -20,7 +20,7 @@ int main(){
   char* c = (char*)malloc(21 * sizeof(char));
   clock_t start = clock();
   //itoa test
-  for (int i = INT32_MIN; i < 2147483600; i += 79) i2a(c, i);
+  for (int i = INT32_MIN; i < 2147483500; i += 79) i2a(c, i);
   printf("use %.6f seconds\n", (float)(clock() - start) / CLOCKS_PER_SEC);
   start = clock();
   //u64toa test
