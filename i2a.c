@@ -69,131 +69,131 @@ static inline unsigned char _utoa(char* c, unsigned int i, unsigned char o) {
   c[o] = 0x30 + i; c[++o] = 0; return o;
 }
 unsigned char u2a(char* c, unsigned int i) {
-if (i > 9) {
+  if (i > 9) {
 	unsigned int I = i | (i >> 1); I |= I >> 2; I |= I >> 4; I |= I >> 8; I |= I >> 16;
 	const unsigned int L = _cDigitsLut[(I * 0x07C4ACDD) >> 0x1B];
 	const unsigned int T = (L + 1) * 0x4d1 >> 12;
 	const unsigned char P = T - (i < (unsigned int)_cPow10[T] ? 1 : 0) + 1;
 	if (P == 2) {
-	const unsigned int V = i / _cRadix2D;
-	const unsigned int F = 2 * (i - (V * _cRadix2D));
-	c[0] = _c2DigitsLut[F];
-	c[1] = _c2DigitsLut[F + 1];
+	  const unsigned int V = i / _cRadix2D;
+	  const unsigned int F = 2 * (i - (V * _cRadix2D));
+	  c[0] = _c2DigitsLut[F];
+	  c[1] = _c2DigitsLut[F + 1];
 	}
 	if (P == 3) {
-	const unsigned int V = i / _cRadix3D;
-	const unsigned int F = 3 * (i - (V * _cRadix3D));
-	c[0] = _c3DigitsLut[F];
-	c[1] = _c3DigitsLut[F + 1];
-	c[2] = _c3DigitsLut[F + 2];
+	  const unsigned int V = i / _cRadix3D;
+	  const unsigned int F = 3 * (i - (V * _cRadix3D));
+	  c[0] = _c3DigitsLut[F];
+	  c[1] = _c3DigitsLut[F + 1];
+	  c[2] = _c3DigitsLut[F + 2];
 	}
 	if (P == 4) {
-	const unsigned int V = i / _cRadix3D;
-	const unsigned int F = 3 * (i - (V * _cRadix3D));
-	c[0] = V + 0x30;
-	c[1] = _c3DigitsLut[F];
-	c[2] = _c3DigitsLut[F + 1];
-	c[3] = _c3DigitsLut[F + 2];
+	  const unsigned int V = i / _cRadix3D;
+	  const unsigned int F = 3 * (i - (V * _cRadix3D));
+	  c[0] = V + 0x30;
+	  c[1] = _c3DigitsLut[F];
+	  c[2] = _c3DigitsLut[F + 1];
+	  c[3] = _c3DigitsLut[F + 2];
 	}
 	if (P == 5) {
-	unsigned int V = i / _cRadix3D;
-	unsigned int F = 3 * (i - (V * _cRadix3D));
-	c[2] = _c3DigitsLut[F];
-	c[3] = _c3DigitsLut[F + 1];
-	c[4] = _c3DigitsLut[F + 2];
-	i = V;
-	V = i / _cRadix2D;
-	F = 2 * (i - (V * _cRadix2D));
-	c[0] = _c2DigitsLut[F];
-	c[1] = _c2DigitsLut[F + 1];
+	  unsigned int V = i / _cRadix3D;
+	  unsigned int F = 3 * (i - (V * _cRadix3D));
+	  c[2] = _c3DigitsLut[F];
+	  c[3] = _c3DigitsLut[F + 1];
+	  c[4] = _c3DigitsLut[F + 2];
+	  i = V;
+	  V = i / _cRadix2D;
+	  F = 2 * (i - (V * _cRadix2D));
+	  c[0] = _c2DigitsLut[F];
+	  c[1] = _c2DigitsLut[F + 1];
 	}
 	if (P == 6) {
-	unsigned int V = i / _cRadix3D;
-	unsigned int F = 3 * (i - (V * _cRadix3D));
-	c[3] = _c3DigitsLut[F];
-	c[4] = _c3DigitsLut[F + 1];
-	c[5] = _c3DigitsLut[F + 2];
-	i = V;
-	V = i / _cRadix3D;
-	F = 3 * (i - (V * _cRadix3D));
-	c[0] = _c3DigitsLut[F];
-	c[1] = _c3DigitsLut[F + 1];
-	c[2] = _c3DigitsLut[F + 2];
+	  unsigned int V = i / _cRadix3D;
+	  unsigned int F = 3 * (i - (V * _cRadix3D));
+	  c[3] = _c3DigitsLut[F];
+	  c[4] = _c3DigitsLut[F + 1];
+	  c[5] = _c3DigitsLut[F + 2];
+	  i = V;
+	  V = i / _cRadix3D;
+	  F = 3 * (i - (V * _cRadix3D));
+	  c[0] = _c3DigitsLut[F];
+	  c[1] = _c3DigitsLut[F + 1];
+	  c[2] = _c3DigitsLut[F + 2];
 	}
 	if (P == 7) {
-	unsigned int V = i / _cRadix3D;
-	unsigned int F = 3 * (i - (V * _cRadix3D));
-	c[4] = _c3DigitsLut[F];
-	c[5] = _c3DigitsLut[F + 1];
-	c[6] = _c3DigitsLut[F + 2];
-	i = V;
-	V = i / _cRadix3D;
-	F = 3 * (i - (V * _cRadix3D));
-	c[1] = _c3DigitsLut[F];
-	c[2] = _c3DigitsLut[F + 1];
-	c[3] = _c3DigitsLut[F + 2];
-	c[0] = V + 0x30;
+	  unsigned int V = i / _cRadix3D;
+	  unsigned int F = 3 * (i - (V * _cRadix3D));
+	  c[4] = _c3DigitsLut[F];
+	  c[5] = _c3DigitsLut[F + 1];
+	  c[6] = _c3DigitsLut[F + 2];
+	  i = V;
+	  V = i / _cRadix3D;
+	  F = 3 * (i - (V * _cRadix3D));
+	  c[1] = _c3DigitsLut[F];
+	  c[2] = _c3DigitsLut[F + 1];
+	  c[3] = _c3DigitsLut[F + 2];
+	  c[0] = V + 0x30;
 	}
 	if (P == 8) {
-	unsigned int V = i / _cRadix3D;
-	unsigned int F = 3 * (i - (V * _cRadix3D));
-	c[5] = _c3DigitsLut[F];
-	c[6] = _c3DigitsLut[F + 1];
-	c[7] = _c3DigitsLut[F + 2];
-	i = V;
-	V = i / _cRadix3D;
-	F = 3 * (i - (V * _cRadix3D));
-	c[2] = _c3DigitsLut[F];
-	c[3] = _c3DigitsLut[F + 1];
-	c[4] = _c3DigitsLut[F + 2];
-	i = V;
-	V = i / _cRadix2D;
-	F = 2 * (i - (V * _cRadix2D));
-	c[0] = _c2DigitsLut[F];
-	c[1] = _c2DigitsLut[F + 1];
+	  unsigned int V = i / _cRadix3D;
+	  unsigned int F = 3 * (i - (V * _cRadix3D));
+	  c[5] = _c3DigitsLut[F];
+	  c[6] = _c3DigitsLut[F + 1];
+	  c[7] = _c3DigitsLut[F + 2];
+	  i = V;
+	  V = i / _cRadix3D;
+	  F = 3 * (i - (V * _cRadix3D));
+	  c[2] = _c3DigitsLut[F];
+	  c[3] = _c3DigitsLut[F + 1];
+	  c[4] = _c3DigitsLut[F + 2];
+	  i = V;
+	  V = i / _cRadix2D;
+	  F = 2 * (i - (V * _cRadix2D));
+	  c[0] = _c2DigitsLut[F];
+	  c[1] = _c2DigitsLut[F + 1];
 	}
 	if (P == 9) {
-	unsigned int V = i / _cRadix3D;
-	unsigned int F = 3 * (i - (V * _cRadix3D));
-	c[6] = _c3DigitsLut[F];
-	c[7] = _c3DigitsLut[F + 1];
-	c[8] = _c3DigitsLut[F + 2];
-	i = V;
-	V = i / _cRadix3D;
-	F = 3 * (i - (V * _cRadix3D));
-	c[3] = _c3DigitsLut[F];
-	c[4] = _c3DigitsLut[F + 1];
-	c[5] = _c3DigitsLut[F + 2];
-	i = V;
-	V = i / _cRadix3D;
-	F = 3 * (i - (V * _cRadix3D));
-	c[0] = _c3DigitsLut[F];
-	c[1] = _c3DigitsLut[F + 1];
-	c[2] = _c3DigitsLut[F + 2];
+	  unsigned int V = i / _cRadix3D;
+	  unsigned int F = 3 * (i - (V * _cRadix3D));
+	  c[6] = _c3DigitsLut[F];
+	  c[7] = _c3DigitsLut[F + 1];
+	  c[8] = _c3DigitsLut[F + 2];
+	  i = V;
+	  V = i / _cRadix3D;
+	  F = 3 * (i - (V * _cRadix3D));
+	  c[3] = _c3DigitsLut[F];
+	  c[4] = _c3DigitsLut[F + 1];
+	  c[5] = _c3DigitsLut[F + 2];
+	  i = V;
+	  V = i / _cRadix3D;
+	  F = 3 * (i - (V * _cRadix3D));
+	  c[0] = _c3DigitsLut[F];
+	  c[1] = _c3DigitsLut[F + 1];
+	  c[2] = _c3DigitsLut[F + 2];
 	}
 	if (P == 10) {
-	unsigned int V = i / _cRadix3D;
-	unsigned int F = 3 * (i - (V * _cRadix3D));
-	c[7] = _c3DigitsLut[F];
-	c[8] = _c3DigitsLut[F + 1];
-	c[9] = _c3DigitsLut[F + 2];
-	i = V;
-	V = i / _cRadix3D;
-	F = 3 * (i - (V * _cRadix3D));
-	c[4] = _c3DigitsLut[F];
-	c[5] = _c3DigitsLut[F + 1];
-	c[6] = _c3DigitsLut[F + 2];
-	i = V;
-	V = i / _cRadix3D;
-	F = 3 * (i - (V * _cRadix3D));
-	c[1] = _c3DigitsLut[F];
-	c[2] = _c3DigitsLut[F + 1];
-	c[3] = _c3DigitsLut[F + 2];
-	c[0] = V + 0x30;
+	  unsigned int V = i / _cRadix3D;
+	  unsigned int F = 3 * (i - (V * _cRadix3D));
+	  c[7] = _c3DigitsLut[F];
+	  c[8] = _c3DigitsLut[F + 1];
+	  c[9] = _c3DigitsLut[F + 2];
+	  i = V;
+	  V = i / _cRadix3D;
+	  F = 3 * (i - (V * _cRadix3D));
+	  c[4] = _c3DigitsLut[F];
+	  c[5] = _c3DigitsLut[F + 1];
+	  c[6] = _c3DigitsLut[F + 2];
+	  i = V;
+	  V = i / _cRadix3D;
+	  F = 3 * (i - (V * _cRadix3D));
+	  c[1] = _c3DigitsLut[F];
+	  c[2] = _c3DigitsLut[F + 1];
+	  c[3] = _c3DigitsLut[F + 2];
+	  c[0] = V + 0x30;
 	}
 	c[P] = 0; return P;
-}
-c[0] = 0x30 + i; c[1] = 0; return 1;
+  }
+  c[0] = 0x30 + i; c[1] = 0; return 1;
 }
 //The fastest u64toa fuction
 unsigned char u64toa(char* c, unsigned long long i) {
