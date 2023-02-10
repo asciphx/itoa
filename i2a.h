@@ -12,6 +12,7 @@
  * version is used to provide a service over a network, the complete source code of
  * the modified version must be made available.
  */
+#pragma warning(disable:4244)
 //not use, just for u64toa, i64toa
 unsigned char _utoa(char* c, unsigned int i, unsigned char o);
 unsigned char u2a(char* c, unsigned int i);
