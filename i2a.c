@@ -40,7 +40,7 @@ static const int _cDigitsLut[0x20] = {
 };
 static const int _cPow10[10] = { 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000 };
 static const int _cRadix = 10, _cRadix2D = 100, _cRadix3D = 1000;
-unsigned char _utoa(char* c, unsigned int i, unsigned char o) {
+static inline unsigned char _utoa(char* c, unsigned int i, unsigned char o) {
   if (i > 9) {
 	unsigned int I = i | (i >> 1); I |= I >> 2; I |= I >> 4; I |= I >> 8; I |= I >> 16;
 	const unsigned int L = _cDigitsLut[(I * 130329821) >> 0x1b];

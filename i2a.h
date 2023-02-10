@@ -13,8 +13,7 @@
  * the modified version must be made available.
  */
 #pragma warning(disable:4244)
-//not use, just for u64toa, i64toa
-unsigned char _utoa(char* c, unsigned int i, unsigned char o);
+//The fastest u2a fuction
 unsigned char u2a(char* c, unsigned int i);
   //The fastest itoa fuction
 static inline unsigned char i2a(char* c, int i) {
