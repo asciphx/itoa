@@ -28,5 +28,13 @@ void i2a(char* c, int i) {
 //The fastest u64toa fuction
 unsigned char u64toa(char* c, unsigned long long i);
 //The fastest i64toa fuction
-unsigned char i64toa(char* c, long long i);
+static
+#if defined(_WIN32)
+__forceinline
+#else
+inline __attribute__((always_inline))
+#endif
+unsigned char i64toa(char* c, long long i) {
+  if (i < 0) { *c = 45; return u64toa(c + 1, ~i + 1); } return u64toa(c, i);
+}
 #endif // I2A_H
