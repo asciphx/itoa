@@ -25,7 +25,7 @@ cmake --build ./build --config Release
 - 如果需要内联的C++版本, 性能会有约65%的提升
 - C++版本详见[https://gitee.com/ASCIPHX/FabCc/blob/lithium/fc/include/h/itoa.h](https://gitee.com/ASCIPHX/FabCc/blob/lithium/fc/include/h/itoa.h)
 
-## 测试[test.c 文件]
+## 测试[test.c 文件, Linux]
 c版本, 非内联(性能会稍微慢点) =>
 u64toa_sse2 use 1.282085 seconds
 u64toa use 2.229963 seconds
@@ -40,7 +40,7 @@ u64toa use 1.078538 seconds
 u32toa_sse2 use 0.103100 seconds
 u2a use 0.099720 seconds
 
-## 详情(c++版本)
+## 详情(c++版本, Linux)
 预测, 综合性能对比SSE大概如下
 
 |Function |Time (ns)|Speedup|

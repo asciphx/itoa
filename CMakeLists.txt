@@ -22,12 +22,12 @@ endif ()
 #or: cmake --build ./build --config Release
 include_directories(./)
 if(WIN32)
-  add_executable(test test.c i2a.c)
+  add_executable(test test.cc i2a.c)
   add_custom_command(TARGET test
 	  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/test.exe ${PROJECT_SOURCE_DIR}/test.exe
   )
 else()
-  add_executable(test test.c i2a.c)
+  add_executable(test test.cc i2a.c)
   add_custom_command(TARGET test
 	  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/test ${PROJECT_SOURCE_DIR}/test
   )

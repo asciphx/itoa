@@ -25,7 +25,7 @@ cmake --build ./build --config Release
 - Faster performance if inlined C++ version is required
 - See C++ version for details[https://github.com/asciphx/FabCc/blob/lithium/fc/include/h/itoa.h](https://github.com/asciphx/FabCc/blob/lithium/fc/include/h/itoa.h)
 
-## Test[test.c file]
+## Test[test.c file, Linux]
 c version, non-inline (performance will be slower) =>  
 u64toa_sse2 use 1.282085 seconds  
 u64toa use 2.229963 seconds  
@@ -40,7 +40,7 @@ u64toa use 1.078538 seconds
 u32toa_sse2 use 0.103100 seconds  
 u2a use 0.099720 seconds  
 
-## Details (c++ version)
+## Details (c++ version, Linux)
 Prediction, comprehensive performance comparison with SSE is roughly as follows  
 
 |Function |Time (ns)|Speedup|
