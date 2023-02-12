@@ -14,10 +14,16 @@
  */
 #pragma warning(disable:4244)
 //The fastest u2a fuction
-unsigned char u2a(char* c, unsigned int i);
+void u2a(char* c, unsigned int i);
 //The fastest itoa fuction
-static inline unsigned char i2a(char* c, int i) {
-  if (i < 0) { *c = 45; return u2a(c + 1, ~i + 1); } return u2a(c, i);
+static
+#if defined(_WIN32)
+__forceinline
+#else
+inline __attribute__((always_inline))
+#endif
+void i2a(char* c, int i) {
+  if (i < 0) { *c = 45; u2a(c + 1, ~i + 1); } u2a(c, i);
 }
 //The fastest u64toa fuction
 unsigned char u64toa(char* c, unsigned long long i);
