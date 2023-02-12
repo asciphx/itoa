@@ -49,10 +49,10 @@ int main() {
   //u64toa test
   start_c = clock();
   for (int i = 0; i < 990000000; i += 9) u64toa(c, UINT64_MAX - i);
-  printf("u64toa use %.6f seconds %s\n", (float)(clock() - start_c) / CLOCKS_PER_SEC, c);
+  printf("u64toa use %.6f seconds\n", (float)(clock() - start_c) / CLOCKS_PER_SEC);
   //u2a test 
   start_c = clock();
   for (int i = -90000000; i < 90000000; i += 9) u2a(c, UINT32_MAX - i);
-  printf("u2a use %.6f seconds %s\n", (float)(clock() - start_c) / CLOCKS_PER_SEC, c);
+  printf("u2a use %.6f seconds\n", (float)(clock() - start_c) / CLOCKS_PER_SEC);
   return 0;
 }

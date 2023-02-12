@@ -13,28 +13,34 @@
  * the modified version must be made available.
  */
 #pragma warning(disable:4244)
-//The fastest u2a fuction
-void u2a(char* c, unsigned int i);
-//The fastest itoa fuction
-static
-#if defined(_WIN32)
-__forceinline
-#else
-inline __attribute__((always_inline))
+#ifdef __cplusplus
+extern "C" {
 #endif
-void i2a(char* c, int i) {
-  if (i < 0) { *c = 45; u2a(c + 1, ~i + 1); } u2a(c, i);
-}
-//The fastest u64toa fuction
-unsigned char u64toa(char* c, unsigned long long i);
-//The fastest i64toa fuction
-static
+  //The fastest u2a fuction
+  void u2a(char* c, unsigned int i);
+  //The fastest itoa fuction
+  static
 #if defined(_WIN32)
-__forceinline
+	__forceinline
 #else
-inline __attribute__((always_inline))
+	inline __attribute__((always_inline))
 #endif
-unsigned char i64toa(char* c, long long i) {
-  if (i < 0) { *c = 45; return u64toa(c + 1, ~i + 1); } return u64toa(c, i);
-}
+	void i2a(char* c, int i) {
+	if (i < 0) { *c = 45; u2a(c + 1, ~i + 1); } u2a(c, i);
+  }
+  //The fastest u64toa fuction
+  unsigned char u64toa(char* c, unsigned long long i);
+  //The fastest i64toa fuction
+  static
+#if defined(_WIN32)
+	__forceinline
+#else
+	inline __attribute__((always_inline))
+#endif
+	unsigned char i64toa(char* c, long long i) {
+	if (i < 0) { *c = 45; return u64toa(c + 1, ~i + 1); } return u64toa(c, i);
+  }
+#ifdef __cplusplus
+}  /* extern "C" */
+#endif
 #endif // I2A_H
