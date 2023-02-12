@@ -27,18 +27,16 @@ cmake --build ./build --config Release
 
 ## Test[test.c file, Linux]
 c version, non-inline (performance will be slower) =>  
-u64toa_sse2 use 1.282085 seconds  
-u64toa use 2.229963 seconds  
-
-u32toa_sse2 use 0.104293 seconds  
-u2a use 0.164470 seconds  
+- u64toa_sse2 use 1.282085 seconds
+- u64toa use 2.229963 seconds
+- u32toa_sse2 use 0.104293 seconds
+- u2a use 0.164470 seconds
 
 c++ version (BigInt is 20.6% faster, Int is 3.4% faster) =>  
-u64toa_sse2 use 1.300226 seconds  
-u64toa use 1.078538 seconds  
-
-u32toa_sse2 use 0.103100 seconds  
-u2a use 0.099720 seconds  
+- u64toa_sse2 use 1.300226 seconds
+- u64toa use 1.078538 seconds
+- u32toa_sse2 use 0.103100 seconds
+- u2a use 0.099720 seconds
 
 ## Details (c++ version, Linux)
 Prediction, comprehensive performance comparison with SSE is roughly as follows  

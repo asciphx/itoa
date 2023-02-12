@@ -27,18 +27,17 @@ cmake --build ./build --config Release
 
 ## 测试[test.c 文件, Linux]
 c版本, 非内联(性能会稍微慢点) =>
-u64toa_sse2 use 1.282085 seconds
-u64toa use 2.229963 seconds
-
-u32toa_sse2 use 0.104293 seconds
-u2a use 0.164470 seconds
+- u64toa_sse2 use 1.282085 seconds
+- u64toa use 2.229963 seconds
+- u32toa_sse2 use 0.104293 seconds
+- u2a use 0.164470 seconds
 
 c++版本(大整数比SSE快20.6%, 整数比SSE快3.4%) =>
-u64toa_sse2 use 1.300226 seconds
-u64toa use 1.078538 seconds
+- u64toa_sse2 use 1.300226 seconds
+- u64toa use 1.078538 seconds
+- u32toa_sse2 use 0.103100 seconds
+- u2a use 0.099720 seconds
 
-u32toa_sse2 use 0.103100 seconds
-u2a use 0.099720 seconds
 
 ## 详情(c++版本, Linux)
 预测, 综合性能对比SSE大概如下
