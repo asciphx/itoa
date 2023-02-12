@@ -1,9 +1,9 @@
 # itoa
 Universe's fastest integer to ASCII conversion. C++11 is supported.
-It is written in pure c language without any reference to other header files.
 
-    itoa.h    - programming interface, header file
-    itoa.c    - source file
+    i2a.h    - programming interface, header file for c version
+    i2a.c    - source file for the c version
+    itoa.h   - C++ version header file
 
 ## Building (Test)
 Out-of-source build with CMake is recommended.
@@ -18,7 +18,7 @@ cmake --build ./build --config Release
 ```
 ## Features
 - If the inline C++ version is required, the performance will be improved by about 65%
-- There is no need for SSE instruction set optimization, and the performance of very large integers has increased by more than 30%
+- There is no need for SSE instruction set optimization, and the performance of very large integers has increased by more than 20%
 - The header file is separated from the source file, without too much inlining, preventing slow compilation
 
 ## illustrate

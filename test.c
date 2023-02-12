@@ -16,7 +16,8 @@
  * 
  * See C++ version for details https://github.com/asciphx/FabCc/blob/lithium/fc/include/h/itoa.h
  */
-#include "i2a.h"
+//#include "i2a.h"
+#include "itoa.h"
  //This is the fastest version of itoa in the universe, only the fastest, not faster.
 int main() {
   char c[21] = { 0 };
