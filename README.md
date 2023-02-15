@@ -31,7 +31,7 @@ c version, non-inline (performance will be slower) =>
 - u32toa_sse2 use 0.108332 seconds
 - u2a use 0.125074 seconds
 
-c++ version (BigInt is 20.6% faster, Int is 3.4% faster) => 
+c++ version (BigInt is 112.3% faster, Int is 9.3% faster) => 
 - u64toa_sse2 use 1.401212 seconds
 - u64toa use 0.659776 seconds
 - u32toa_sse2 use 0.106061 seconds

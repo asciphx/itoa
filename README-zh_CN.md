@@ -31,7 +31,7 @@ c版本, 非内联(性能会稍微慢点) =>
 - u32toa_sse2 use 0.108332 seconds
 - u2a use 0.125074 seconds
 
-c++版本(大整数比SSE快20.6%, 整数比SSE快3.4%) =>
+c++版本(大整数比SSE快112.3%, 整数比SSE快9.3%) =>
 - u64toa_sse2 use 1.401212 seconds
 - u64toa use 0.659776 seconds
 - u32toa_sse2 use 0.106061 seconds
