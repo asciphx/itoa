@@ -1,0 +1,5 @@
+*.ilk
+*.pdb
+*.obj
+/build
+/.vs
