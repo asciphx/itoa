@@ -16,7 +16,7 @@
  * 
  * See C++ version for details https://github.com/asciphx/FabCc/blob/lithium/fc/include/h/itoa.h
  */
-//#include "i2a.h"
+// #include "i2a.h"
 #include "itoa.h"
 #include "third-party/sse2.h"
  //This is the fastest version of itoa in the universe, only the fastest, not faster.
@@ -25,15 +25,40 @@ int main() {
   clock_t start_c;
   start_c = clock();
   for (int i = 0; i < 990000000; i += 9) u64toa_sse2(UINT64_MAX - i, c);
-  printf("u64toa_sse2 use %.6f seconds %s\n", (float)(clock() - start_c) / CLOCKS_PER_SEC, c);
+  printf("u64toa_sse2 use %.6f seconds\n", (float)(clock() - start_c) / CLOCKS_PER_SEC);
   start_c = clock();
   for (int i = 0; i < 990000000; i += 9) u64toa(c, UINT64_MAX - i);
-  printf("u64toa use %.6f seconds %s\n", (float)(clock() - start_c) / CLOCKS_PER_SEC, c);
+  printf("u64toa use %.6f seconds\n", (float)(clock() - start_c) / CLOCKS_PER_SEC);
   start_c = clock();
   for (int i = -90000000; i < 90000000; i += 9) u32toa_sse2(UINT32_MAX - i, c);
-  printf("u32toa_sse2 use %.6f seconds %s\n", (float)(clock() - start_c) / CLOCKS_PER_SEC, c);
+  printf("u32toa_sse2 use %.6f seconds\n", (float)(clock() - start_c) / CLOCKS_PER_SEC);
   start_c = clock();
   for (int i = -90000000; i < 90000000; i += 9) u2a(c, UINT32_MAX - i);
-  printf("u2a use %.6f seconds %s\n", (float)(clock() - start_c) / CLOCKS_PER_SEC, c);
+  printf("u2a use %.6f seconds\n", (float)(clock() - start_c) / CLOCKS_PER_SEC);
+  return 0;
+  i2a(c, -9); printf("%s\n", c);
+  i2a(c, -98); printf("%s\n", c);
+  i2a(c, -987); printf("%s\n", c);
+  i2a(c, -9876); printf("%s\n", c);
+  i2a(c, -98765); printf("%s\n", c);
+  i2a(c, -987654); printf("%s\n", c);
+  i2a(c, -9876543); printf("%s\n", c);
+  i2a(c, -98765432); printf("%s\n", c);
+  i2a(c, -987654321); printf("%s\n", c);
+  i2a(c, INT32_MIN); printf("%s\n", c);
+  i2a(c, INT32_MAX); printf("%s\n", c);
+  i64toa(c, INT64_MAX); printf("%s\n", c);
+  i64toa(c, INT64_MIN); printf("%s\n", c);
+  u2a(c, 9); printf("%s\n", c);
+  u2a(c, 98); printf("%s\n", c);
+  u2a(c, 987); printf("%s\n", c);
+  u2a(c, 9876); printf("%s\n", c);
+  u2a(c, 98765); printf("%s\n", c);
+  u2a(c, 987654); printf("%s\n", c);
+  u2a(c, 9876543); printf("%s\n", c);
+  u2a(c, 98765432); printf("%s\n", c);
+  u2a(c, 987654321); printf("%s\n", c);
+  u2a(c, UINT32_MAX); printf("%s\n", c);
+  u64toa(c, UINT64_MAX); printf("%s\n", c);
   return 0;
 }

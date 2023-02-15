@@ -17,7 +17,7 @@
 extern "C" {
 #endif
   //The fastest u2a fuction
-  void u2a(char* c, unsigned int i);
+  unsigned char u2a(char* c, unsigned int i);
   //The fastest itoa fuction
   static
 #if defined(_WIN32)
@@ -25,8 +25,8 @@ extern "C" {
 #else
 	inline __attribute__((always_inline))
 #endif
-	void i2a(char* c, int i) {
-	if (i < 0) { *c = 45; u2a(c + 1, ~i + 1); } u2a(c, i);
+	unsigned char i2a(char* c, int i) {
+	if (i < 0) { *c = 45; return u2a(++c, ~--i); } return u2a(c, i);
   }
   //The fastest u64toa fuction
   unsigned char u64toa(char* c, unsigned long long i);
@@ -38,7 +38,7 @@ extern "C" {
 	inline __attribute__((always_inline))
 #endif
 	unsigned char i64toa(char* c, long long i) {
-	if (i < 0) { *c = 45; return u64toa(c + 1, ~i + 1); } return u64toa(c, i);
+	if (i < 0) { *c = 45; return u64toa(++c, ~--i); } return u64toa(c, i);
   }
 #ifdef __cplusplus
 }  /* extern "C" */

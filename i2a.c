@@ -42,55 +42,23 @@ static __ALIGN(2) const char _c3DigitsLut[0xbb9] =
 static __ALIGN(2) const char _c2DigitsLut[0xc9] =
 "0001020304050607080910111213141516171819202122232425262728293031323334353637383940414243444546474849"
 "5051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899";
-static __ALIGN(16) const int _cDigitsLut[0x20] = {
-  0, 9, 1, 10, 13, 21, 2, 29, 11, 14, 16, 18, 22, 25, 3, 30, 8, 12, 20, 28, 15, 17, 24, 7, 19, 27, 23, 6, 26, 5, 4, 31
-};
-static __ALIGN(16) const unsigned int _cPow10[10] = { 1u, 10u, 100u, 1000u, 10000u, 100000u, 1000000u, 10000000u, 100000000u, 1000000000u };
-static __ALIGN(16) const int _cRadix = 10, _cRadix2D = 100, _cRadix3D = 1000;
+static __ALIGN(16) const unsigned int _cRadix = 10u, _cRadix2D = 100u, _cRadix3D = 1000u, _cRadix4D = 10000u, _cRadix6D = 1000000u, _cRadix7D = 10000000u;
 static _INLINE unsigned char _utoa(char* c, unsigned int i, unsigned char o) {
-#ifdef _WIN32
-  if (i > 9) {
-	unsigned int I = i | (i >> 1); I |= I >> 2; I |= I >> 4; I |= I >> 8; I |= I >> 16;
-	const unsigned int L = _cDigitsLut[(I * 130329821) >> 0x1b];
-	const unsigned int T = (L + 1) * 0x4D1 >> 12;
-	const unsigned char P = T - (i < (unsigned int)_cPow10[T] ? 1 : 0) + 1 + o;
-	I = P;
-	while (i > 99) {
-	  I -= 3;
-	  const unsigned int V = i / _cRadix3D;
-	  const unsigned int F = 3 * (i - (V * _cRadix3D));
-	  c[I] = _c3DigitsLut[F];
-	  c[I + 1] = _c3DigitsLut[F + 1];
-	  c[I + 2] = _c3DigitsLut[F + 2];
-	  i = V;
-	}
-	while (i > 9) {
-	  I -= 2;
-	  const unsigned int V = i / _cRadix2D;
-	  const unsigned int F = 2 * (i - (V * _cRadix2D));
-	  c[I] = _c2DigitsLut[F];
-	  c[I + 1] = _c2DigitsLut[F + 1];
-	  i = V;
-	}
-	if (i != 0) c[--I] = 0x30 + i; c[P] = 0; return P;
-  }
-  c[o] = 0x30 + i; c[++o] = 0; return o;
-#else
-  if (i < 10000) {
-	const unsigned int a = (i / 100) << 1;
-	const unsigned int b = (i % 100) << 1;
+  if (i < _cRadix4D) {
+	const unsigned int a = (i / _cRadix2D) << 1;
+	const unsigned int b = (i % _cRadix2D) << 1;
 	if (i > 999) c[o++] = _c2DigitsLut[a];
 	if (i > 99) c[o++] = _c2DigitsLut[a + 1];
 	if (i > 9) c[o++] = _c2DigitsLut[b];
 	c[o++] = _c2DigitsLut[b + 1];
 	c[o] = 0; return o;
   } else if (i < 100000000) {
-	const unsigned int a = i / 10000;
-	const unsigned int b = i % 10000;
-	const unsigned int c1 = (a / 100) << 1;
-	const unsigned int c2 = (a % 100) << 1;
-	const unsigned int c3 = (b / 100) << 1;
-	const unsigned int c4 = (b % 100) << 1;
+	const unsigned int a = i / _cRadix4D;
+	const unsigned int b = i % _cRadix4D;
+	const unsigned int c1 = (a / _cRadix2D) << 1;
+	const unsigned int c2 = (a % _cRadix2D) << 1;
+	const unsigned int c3 = (b / _cRadix2D) << 1;
+	const unsigned int c4 = (b % _cRadix2D) << 1;
 	if (i > 9999999) c[o++] = _c2DigitsLut[c1];
 	if (i > 999999) c[o++] = _c2DigitsLut[c1 + 1];
 	if (i > 99999) c[o++] = _c2DigitsLut[c2];
@@ -123,78 +91,67 @@ static _INLINE unsigned char _utoa(char* c, unsigned int i, unsigned char o) {
 	c[o++] = _c2DigitsLut[d4 + 1];
 	c[o] = 0; return o;
   }
-#endif
 }
 //The fastest utoa fuction
-void u2a(char* c, unsigned int i) {
-  if (i < 10000) {
-	unsigned int a = (i / 100) << 1;
-	if (i > 999) *c++ = _c2DigitsLut[a];
-	if (i > 99) *c++ = _c2DigitsLut[a + 1];
-	a = (i % 100) << 1;
-	if (i > 9) *c++ = _c2DigitsLut[a];
+unsigned char u2a(char* c, unsigned int i) {
+  if (i < _cRadix4D) {
+	unsigned int a = (i / _cRadix2D) << 1; unsigned char l = 1;
+	if (i > 999) *c++ = _c2DigitsLut[a], ++l;
+	if (i > 99) *c++ = _c2DigitsLut[a + 1], ++l;
+	a = (i % _cRadix2D) << 1;
+	if (i > 9) *c++ = _c2DigitsLut[a], ++l;
 	*c++ = _c2DigitsLut[a + 1];
-	*c = 0;
+	*c = 0; return l;
   } else if (i < 100000000) {
-	unsigned int a = i / 10000, b = i % 10000;
-	unsigned int e = (a / 100) << 1;
-	if (i > 9999999) *c++ = _c2DigitsLut[e];
-	if (i > 999999) *c++ = _c2DigitsLut[e + 1];
-	a = (a % 100) << 1;
-	if (i > 99999) *c++ = _c2DigitsLut[a];
-	e = (b / 100) << 1;
-	b = (b % 100) << 1;
+	unsigned int a = i / _cRadix4D, b = i % _cRadix4D;
+	unsigned int e = (a / _cRadix2D) << 1; unsigned char l = 5;
+	if (i > 9999999) *c++ = _c2DigitsLut[e], ++l;
+	if (i > 999999) *c++ = _c2DigitsLut[e + 1], ++l;
+	a = (a % _cRadix2D) << 1;
+	if (i > 99999) *c++ = _c2DigitsLut[a], ++l;
+	e = (b / _cRadix2D) << 1;
+	b = (b % _cRadix2D) << 1;
 	*c++ = _c2DigitsLut[a + 1];
 	*c++ = _c2DigitsLut[e];
 	*c++ = _c2DigitsLut[e + 1];
 	*c++ = _c2DigitsLut[b];
 	*c++ = _c2DigitsLut[b + 1];
-	*c = 0;
+	*c = 0; return l;
+  } else if (i < 1000000000) {
+	unsigned int V = i / _cRadix3D;
+	unsigned int F = 3 * (i - (V * _cRadix3D));
+	c[6] = _c3DigitsLut[F];
+	c[7] = _c3DigitsLut[++F];
+	c[8] = _c3DigitsLut[++F];
+	i = V / _cRadix3D;
+	F = 3 * (V - (i * _cRadix3D));
+	c[3] = _c3DigitsLut[F];
+	c[4] = _c3DigitsLut[++F];
+	c[5] = _c3DigitsLut[++F];
+	V = i / _cRadix3D;
+	F = 3 * (i - (V * _cRadix3D));
+	c[0] = _c3DigitsLut[F];
+	c[1] = _c3DigitsLut[++F];
+	c[2] = _c3DigitsLut[++F];
+	c[9] = 0; return 9;
   } else {
-	unsigned int I = i | (i >> 1); I |= I >> 2; I |= I >> 4; I |= I >> 8; I |= I >> 16;
-	const unsigned int L = _cDigitsLut[(I * 0x07C4ACDD) >> 0x1B];
-	const unsigned int T = (L + 1) * 0x4d1 >> 12;
-	const unsigned char P = T - (i < _cPow10[T] ? 1 : 0) + 1;
-	if (P == 9) {
-	  unsigned int V = i / _cRadix3D;
-	  unsigned int F = 3 * (i - (V * _cRadix3D));
-	  c[6] = _c3DigitsLut[F];
-	  c[7] = _c3DigitsLut[F + 1];
-	  c[8] = _c3DigitsLut[F + 2];
-	  i = V;
-	  V = i / _cRadix3D;
-	  F = 3 * (i - (V * _cRadix3D));
-	  c[3] = _c3DigitsLut[F];
-	  c[4] = _c3DigitsLut[F + 1];
-	  c[5] = _c3DigitsLut[F + 2];
-	  i = V;
-	  V = i / _cRadix3D;
-	  F = 3 * (i - (V * _cRadix3D));
-	  c[0] = _c3DigitsLut[F];
-	  c[1] = _c3DigitsLut[F + 1];
-	  c[2] = _c3DigitsLut[F + 2];
-	}
-	if (P == 10) {
-	  unsigned int V = i / _cRadix3D;
-	  unsigned int F = 3 * (i - (V * _cRadix3D));
-	  c[7] = _c3DigitsLut[F];
-	  c[8] = _c3DigitsLut[F + 1];
-	  c[9] = _c3DigitsLut[F + 2];
-	  i = V;
-	  V = i / _cRadix3D;
-	  F = 3 * (i - (V * _cRadix3D));
-	  c[4] = _c3DigitsLut[F];
-	  c[5] = _c3DigitsLut[F + 1];
-	  c[6] = _c3DigitsLut[F + 2];
-	  i = V;
-	  V = i / _cRadix3D;
-	  F = 3 * (i - (V * _cRadix3D));
-	  c[1] = _c3DigitsLut[F];
-	  c[2] = _c3DigitsLut[F + 1];
-	  c[3] = _c3DigitsLut[F + 2];
-	  c[0] = V + 0x30;
-	}
-	c[P] = 0;
+	unsigned int V = i / _cRadix3D;
+	unsigned int F = 3 * (i - (V * _cRadix3D));
+	c[7] = _c3DigitsLut[F];
+	c[8] = _c3DigitsLut[++F];
+	c[9] = _c3DigitsLut[++F];
+	i = V / _cRadix3D;
+	F = 3 * (V - (i * _cRadix3D));
+	c[4] = _c3DigitsLut[F];
+	c[5] = _c3DigitsLut[++F];
+	c[6] = _c3DigitsLut[++F];
+	V = i / _cRadix3D;
+	F = 3 * (i - (V * _cRadix3D));
+	c[0] = V + 0x30;
+	c[1] = _c3DigitsLut[F];
+	c[2] = _c3DigitsLut[++F];
+	c[3] = _c3DigitsLut[++F];
+	c[_cRadix] = 0; return _cRadix;
   }
 }
 //The fastest u64toa fuction
@@ -202,17 +159,21 @@ unsigned char u64toa(char* c, unsigned long long i) {
   if (i > 9999999999) {
 	unsigned char k = _utoa(c, i / 10000000000, 0);
 	i %= 10000000000;
-	if (i > 0xffffffff) {
-	  c[k] = i / 1000000000 + 0x30;
-	  i %= 1000000000;
-	  return _utoa(c, i, ++k);
-	}
-	const unsigned char d = _utoa(c, i, k);
-	if (d == k + _cRadix) { return d; }
-	char* s = c + d, z = d - k + 1, f = _cRadix + k;
-	while (--z) c[--f] = *--s;
-	while (--f >= k) c[f] = 0x30;
-	c[_cRadix + k] = 0; return d;
+	unsigned int F = i / 1000000000;
+	F = i / _cRadix7D * 3; i %= _cRadix7D;
+	c[k] = _c3DigitsLut[F];
+	c[++k] = _c3DigitsLut[++F];
+	c[++k] = _c3DigitsLut[++F];
+	F = i / _cRadix4D * 3; i %= _cRadix4D;
+	c[++k] = _c3DigitsLut[F];
+	c[++k] = _c3DigitsLut[++F];
+	c[++k] = _c3DigitsLut[++F];
+	F = i / _cRadix * 3; i %= _cRadix;
+	c[++k] = _c3DigitsLut[F];
+	c[++k] = _c3DigitsLut[++F];
+	c[++k] = _c3DigitsLut[++F];
+	c[++k] = i + 0x30;
+	c[++k] = 0; return k;
   }
   if (i > 0xffffffff) {
 	c[0] = i / 1000000000 + 0x30;
