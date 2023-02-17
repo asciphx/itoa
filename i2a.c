@@ -75,7 +75,7 @@ static _INLINE unsigned char _utoa(char* c, unsigned int i, unsigned char o) {
 	  c[o++] = _c3DigitsLut[a + 1];
 	  c[o++] = _c3DigitsLut[a + 2];
 	} else {
-	  a *= 2;
+		a <<= 1;
 	  c[o++] = _c2DigitsLut[a];
 	  c[o++] = _c2DigitsLut[a + 1];
 	}

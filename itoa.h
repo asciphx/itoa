@@ -54,8 +54,7 @@ extern "C" {
 #endif
   //not use, just for u64toa
   _INLINE static unsigned char _utoa(char* c, unsigned int i, unsigned char o) {
-	//4294967295
-	if (i < 1000000) {
+	if (i < _cRadix4D) {
 	  const unsigned int a = (i / _cRadix2D) << 1;
 	  const unsigned int b = (i % _cRadix2D) << 1;
 	  if (i > 999) c[o++] = _c2DigitsLut[a];
@@ -87,7 +86,7 @@ extern "C" {
 		c[o++] = _c3DigitsLut[a + 1];
 		c[o++] = _c3DigitsLut[a + 2];
 	  } else {
-		a *= 2;
+		a <<= 1;
 		c[o++] = _c2DigitsLut[a];
 		c[o++] = _c2DigitsLut[a + 1];
 	  }
