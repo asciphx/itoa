@@ -19,16 +19,23 @@
 // #include "i2a.h"
 #include "itoa.h"
 #include "third-party/sse2.h"
+#include "third-party/jeaiii.hpp"
  //This is the fastest version of itoa in the universe, only the fastest, not faster.
 int main() {
   char c[21] = { 0 };
   clock_t start_c;
   start_c = clock();
-  for (int i = 0; i < 990000000; i += 9) u64toa_sse2(UINT64_MAX - i, c);
+  for (unsigned long long i = 0; i < 99000000099; i += 999) jeaiii::to_text_from_integer(c, UINT64_MAX - i);
+  printf("u64toa_jeaiii use %.6f seconds\n", (float)(clock() - start_c) / CLOCKS_PER_SEC);
+  start_c = clock();
+  for (unsigned long long i = 0; i < 99000000099; i += 999) u64toa_sse2(UINT64_MAX - i, c);
   printf("u64toa_sse2 use %.6f seconds\n", (float)(clock() - start_c) / CLOCKS_PER_SEC);
   start_c = clock();
-  for (int i = 0; i < 990000000; i += 9) u64toa(c, UINT64_MAX - i);
+  for (unsigned long long i = 0; i < 99000000099; i += 999) u64toa(c, UINT64_MAX - i);
   printf("u64toa use %.6f seconds\n", (float)(clock() - start_c) / CLOCKS_PER_SEC);
+  start_c = clock();
+  for (int i = -90000000; i < 90000000; i += 9) jeaiii::to_text_from_integer(c, UINT32_MAX - i);
+  printf("u32toa_jeaiii use %.6f seconds\n", (float)(clock() - start_c) / CLOCKS_PER_SEC);
   start_c = clock();
   for (int i = -90000000; i < 90000000; i += 9) u32toa_sse2(UINT32_MAX - i, c);
   printf("u32toa_sse2 use %.6f seconds\n", (float)(clock() - start_c) / CLOCKS_PER_SEC);
