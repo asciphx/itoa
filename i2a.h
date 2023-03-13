@@ -12,7 +12,6 @@
  * version is used to provide a service over a network, the complete source code of
  * the modified version must be made available.
  */
-#pragma warning(disable:4244)
 #ifdef __cplusplus
 extern "C" {
 #endif
