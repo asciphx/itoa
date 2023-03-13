@@ -17,7 +17,7 @@
  * See C++ version for details https://github.com/asciphx/FabCc/blob/lithium/fc/include/h/itoa.h
  */
 // #include "i2a.h"
-#include "itoa.h"
+#include "i2a.hpp"
 #include "third-party/sse2.h"
 #include "third-party/jeaiii.hpp"
  //This is the fastest version of itoa in the universe, only the fastest, not faster.

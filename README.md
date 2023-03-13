@@ -3,7 +3,7 @@ Universe's fastest integer to ASCII conversion. C++11 is supported.
 
     i2a.h    - programming interface, header file for c version
     i2a.c    - source file for the c version
-    itoa.h   - C++ version header file
+    i2a.hpp  - C++ version header file
 
 ## Building (Test)
 Out-of-source build with CMake is recommended.
