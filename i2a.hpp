@@ -11,7 +11,6 @@
 * preserved. Contributors provide an express grant of patent rights. When a modified
 * version is used to provide a service over a network, the complete source code of
 * the modified version must be made available.
-* See C++ version for details https://github.com/asciphx/FabCc/blob/main/fc/include/hpp/i2a.hpp
 */
 #if defined(_WIN32)
 #define __ALIGN(_) __declspec(align(_))
@@ -155,17 +154,17 @@ _INLINE static char* u64toa(char* c, unsigned long long i) {
     if (h < U32(1e5)) {
       if (h < U32(1e3)) {
         if (h < U32(1e2)) {
-          h <<= 1; if (h > 9) *c++ = _c2DigitsLut[h]; *c++ = _c2DigitsLut[++h];
+          h <<= 1; if (h > 9) *c++ = _c2DigitsLut[h]; *c++ = _c2DigitsLut[++h]; goto $;
         }
-        *c++ = _c3DigitsLut[h *= 3]; *c++ = _c3DigitsLut[++h]; *c++ = _c3DigitsLut[++h];
+        *c++ = _c3DigitsLut[h *= 3]; *c++ = _c3DigitsLut[++h]; *c++ = _c3DigitsLut[++h]; goto $;
       }
       const unsigned int a = h / 100;
       if (a < U32(1e2)) {
         const unsigned int b = a << 1; *c++ = _c2DigitsLut[b]; *c++ = _c2DigitsLut[b + 1];
-        *c++ = _c2DigitsLut[h = (h % 100u) << 1]; *c++ = _c2DigitsLut[++h];
+        *c++ = _c2DigitsLut[h = (h % 100u) << 1]; *c++ = _c2DigitsLut[++h]; goto $;
       }
       const unsigned int b = a * 3; *c++ = _c3DigitsLut[b]; *c++ = _c3DigitsLut[b + 1]; *c++ = _c3DigitsLut[b + 2];
-      *c++ = _c2DigitsLut[h = (h % 100) << 1]; *c++ = _c2DigitsLut[++h];
+      *c++ = _c2DigitsLut[h = (h % 100) << 1]; *c++ = _c2DigitsLut[++h]; goto $;
     }
     const unsigned int b = h / 1000 * 3; *c++ = _c3DigitsLut[b]; *c++ = _c3DigitsLut[b + 1]; *c++ = _c3DigitsLut[b + 2];
     *c++ = _c3DigitsLut[h = (h % 1000) * 3]; *c++ = _c3DigitsLut[++h]; *c++ = _c3DigitsLut[++h];
@@ -190,7 +189,7 @@ _INLINE static char* u64toa(char* c, unsigned long long i) {
     }
     c += 7 + z;
   }
-  h = static_cast<unsigned int>(i / 10000000) * 3; i %= 10000000;
+$:h = static_cast<unsigned int>(i / 10000000) * 3; i %= 10000000;
   *c++ = _c3DigitsLut[h];
   *c++ = _c3DigitsLut[++h];
   *c++ = _c3DigitsLut[++h];
@@ -202,7 +201,7 @@ _INLINE static char* u64toa(char* c, unsigned long long i) {
   *c++ = _c3DigitsLut[h];
   *c++ = _c3DigitsLut[++h];
   *c++ = _c3DigitsLut[++h];
-  *c++ = static_cast<char>(i % 10 + 0x30);
+  *c++ = _c1DigitsLut[i % 10];
   *c++ = 0; return c;
 }
 //The fastest i64toa fuction

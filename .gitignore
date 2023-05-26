@@ -2,4 +2,6 @@
 *.pdb
 *.obj
 /build
+/out
 /.vs
+/.vscode
