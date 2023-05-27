@@ -44,7 +44,6 @@ static __ALIGN(1) volatile char _c3DigitsLut[0xbb9] =
 static __ALIGN(1) volatile char _c2DigitsLut[0xc9] =
 "0001020304050607080910111213141516171819202122232425262728293031323334353637383940414243444546474849"
 "5051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899";
-static __ALIGN(1) volatile char _c1DigitsLut[0xb] = "0123456789";
 //The fastest htoa fuction
 _INLINE static char* h2a(char* c, unsigned char i) {
   if (i < U32(1e2)) { i <<= 1; if (i > 9) *c++ = _c2DigitsLut[i]; *c++ = _c2DigitsLut[++i]; return c; }
@@ -74,7 +73,7 @@ _INLINE static char* u2a(char* c, unsigned int i) {
       }
       *c++ = _c3DigitsLut[i *= 3]; *c++ = _c3DigitsLut[++i]; *c++ = _c3DigitsLut[++i]; return c;
     }
-    const unsigned short a = (static_cast<unsigned int>(i) / 100) * 3;
+    const unsigned short a = static_cast<unsigned short>(i / 100) * 3;
     if (i > 9999) *c++ = _c3DigitsLut[a]; *c++ = _c3DigitsLut[a + 1]; *c++ = _c3DigitsLut[a + 2];
     *c++ = _c2DigitsLut[i = (i % 100) << 1]; *c++ = _c2DigitsLut[++i]; return c;
   }
@@ -121,11 +120,11 @@ _INLINE static char* u64toa(char* c, unsigned long long i) {
         }
         *c++ = _c3DigitsLut[i *= 3]; *c++ = _c3DigitsLut[++i]; *c++ = _c3DigitsLut[++i]; return c;
       }
-      const unsigned short a = (static_cast<unsigned int>(i) / 100) * 3;
+      const unsigned short a = static_cast<unsigned short>(i / 100) * 3;
       if (i > 9999) *c++ = _c3DigitsLut[a]; *c++ = _c3DigitsLut[a + 1]; *c++ = _c3DigitsLut[a + 2];
       *c++ = _c2DigitsLut[i = (i % 100) << 1]; *c++ = _c2DigitsLut[++i]; return c;
     }
-    const unsigned int S = static_cast<unsigned int>(i) / 1000000;
+    const unsigned int S = static_cast<unsigned int>(i / 1000000);
     if (S < U32(1e2)) {
       const unsigned int a = S << 1;
       if (S > 9) *c++ = _c2DigitsLut[a];
@@ -139,7 +138,7 @@ _INLINE static char* u64toa(char* c, unsigned long long i) {
       *c++ = _c2DigitsLut[b + 1];
     }
     i %= 1000000;
-    unsigned int G = static_cast<unsigned int>(i) / 1000 * 3;
+    unsigned long long G = i / 1000 * 3;
     *c++ = _c3DigitsLut[G];
     *c++ = _c3DigitsLut[++G];
     *c++ = _c3DigitsLut[++G];
@@ -182,7 +181,7 @@ _INLINE static char* u64toa(char* c, unsigned long long i) {
     V = h / 1000; x -= 5;
     F = 3 * (h - (V * 1000));
     switch (z) {
-    case 3: c[0] = _c1DigitsLut[V];
+    case 3: c[0] = V + 0x30;
     case 2: c[x] = _c3DigitsLut[F];
     case 1: c[x + 1] = _c3DigitsLut[F + 1];
     case 0: c[x + 2] = _c3DigitsLut[F + 2];
@@ -201,8 +200,8 @@ $:h = static_cast<unsigned int>(i / 10000000) * 3; i %= 10000000;
   *c++ = _c3DigitsLut[h];
   *c++ = _c3DigitsLut[++h];
   *c++ = _c3DigitsLut[++h];
-  *c++ = _c1DigitsLut[i % 10];
-  *c++ = 0; return c;
+  *c++ = i % 10 + 0x30;
+  return c;
 }
 //The fastest i64toa fuction
 _INLINE static char* i64toa(char* c, long long i) { if (i < 0) { *c = 45; return u64toa(++c, ~--i); } return u64toa(c, i); }
