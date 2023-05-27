@@ -53,10 +53,10 @@ _INLINE static char* h2a(char* c, unsigned char i) {
 _INLINE static char* a2a(char* c, char i) { if (i < 0) { *c = 45; return h2a(++c, ~--i); } return h2a(c, i); }
 //The fastest ttoa fuction
 _INLINE static char* t2a(char* c, unsigned short i) {
+  if (i < U32(1e2)) {
+    i <<= 1; if (i > 19) *c++ = _c2DigitsLut[i]; *c++ = _c2DigitsLut[++i]; return c;
+  }
   if (i < U32(1e3)) {
-    if (i < U32(1e2)) {
-      i <<= 1; if (i > 19) *c++ = _c2DigitsLut[i]; *c++ = _c2DigitsLut[++i]; return c;
-    }
     *c++ = _c3DigitsLut[i *= 3]; *c++ = _c3DigitsLut[++i]; *c++ = _c3DigitsLut[++i]; return c;
   }
   const unsigned short a = (i / 100) * 3; if (i > 9999) *c++ = _c3DigitsLut[a]; *c++ = _c3DigitsLut[a + 1];
@@ -66,128 +66,84 @@ _INLINE static char* t2a(char* c, unsigned short i) {
 _INLINE static char* s2a(char* c, short i) { if (i < 0) { *c = 45; return t2a(++c, ~--i); } return t2a(c, i); }
 //The fastest utoa fuction
 _INLINE static char* u2a(char* c, unsigned int i) {
-  if (i < U32(1e5)) {
-    if (i < U32(1e3)) {
-      if (i < U32(1e2)) {
-        i <<= 1; if (i > 19) *c++ = _c2DigitsLut[i]; *c++ = _c2DigitsLut[++i]; return c;
-      }
-      *c++ = _c3DigitsLut[i *= 3]; *c++ = _c3DigitsLut[++i]; *c++ = _c3DigitsLut[++i]; return c;
+  if (i < U32(1e6)) {
+    if (i < U32(1e2)) {
+      i <<= 1; if (i > 19) *c++ = _c2DigitsLut[i]; *c++ = _c2DigitsLut[++i]; return c;
     }
-    const unsigned short a = static_cast<unsigned short>(i / 100) * 3;
-    if (i > 9999) *c++ = _c3DigitsLut[a]; *c++ = _c3DigitsLut[a + 1]; *c++ = _c3DigitsLut[a + 2];
-    *c++ = _c2DigitsLut[i = (i % 100) << 1]; *c++ = _c2DigitsLut[++i]; return c;
+    unsigned int V = i / 1000;
+    if (V < 10) {
+      if (V) *c++ = V + 0x30; i = (i - (V * 1000)) * 3;
+      *c++ = _c3DigitsLut[i]; *c++ = _c3DigitsLut[i + 1]; *c++ = _c3DigitsLut[i + 2]; return c;
+    }
+    V *= 3; if (V > 299) *c++ = _c3DigitsLut[V]; *c++ = _c3DigitsLut[++V]; *c++ = _c3DigitsLut[++V];
+    *c++ = _c3DigitsLut[i = i % 1000 * 3]; *c++ = _c3DigitsLut[++i]; *c++ = _c3DigitsLut[++i]; return c;
   }
-  const unsigned int S = i / 1000000;
-  if (S < U32(1e2)) {
-    unsigned int F = S << 1;
-    if (S > 9) *c++ = _c2DigitsLut[F];
-    *c++ = _c2DigitsLut[++F];
-    i %= 1000000;
-    F = (i / 1000) * 3;
-    *c++ = _c3DigitsLut[F];
-    *c++ = _c3DigitsLut[++F];
-    *c++ = _c3DigitsLut[++F];
-    F = (i % 1000) * 3;
-    *c++ = _c3DigitsLut[F];
-    *c++ = _c3DigitsLut[++F];
-    *c++ = _c3DigitsLut[++F]; return c;
+  if (i < U32(1e8)) {
+    unsigned int V = i / 1000000; V <<= 1; if (V > 19) *c++ = _c2DigitsLut[V]; *c++ = _c2DigitsLut[V + 1];
+    *c++ = _c3DigitsLut[V = (i %= 1000000) / 1000 * 3]; *c++ = _c3DigitsLut[++V]; *c++ = _c3DigitsLut[++V];
+    *c++ = _c3DigitsLut[i = i % 1000 * 3]; *c++ = _c3DigitsLut[++i]; *c++ = _c3DigitsLut[++i]; return c;
   }
-  unsigned int F = (S / 100) << 1;
-  if (S > 999) *c++ = _c2DigitsLut[F];
-  *c++ = _c2DigitsLut[++F];
-  F = (S % 100) << 1;
-  *c++ = _c2DigitsLut[F];
-  *c++ = _c2DigitsLut[++F];
-  i %= 1000000;
-  F = (i / 1000) * 3;
-  *c++ = _c3DigitsLut[F];
-  *c++ = _c3DigitsLut[++F];
-  *c++ = _c3DigitsLut[++F];
-  F = (i % 1000) * 3;
-  *c++ = _c3DigitsLut[F];
-  *c++ = _c3DigitsLut[++F];
-  *c++ = _c3DigitsLut[++F]; return c;
+  unsigned int V = i / 100000000; V <<= 1; if (V > 19) *c++ = _c2DigitsLut[V]; *c++ = _c2DigitsLut[V + 1];
+  *c++ = _c3DigitsLut[V = (i %= 100000000) / 100000 * 3]; *c++ = _c3DigitsLut[++V]; *c++ = _c3DigitsLut[++V];
+  *c++ = _c3DigitsLut[V = (i %= 100000) / 100 * 3]; *c++ = _c3DigitsLut[++V]; *c++ = _c3DigitsLut[++V];
+  *c++ = _c2DigitsLut[i = i % 100 * 2]; *c++ = _c2DigitsLut[++i]; return c;
 }
 //The fastest itoa fuction
 _INLINE static char* i2a(char* c, int i) { if (i < 0) { *c = 45; return u2a(++c, ~--i); } return u2a(c, i); }
 //The fastest u64toa fuction
 _INLINE static char* u64toa(char* c, unsigned long long i) {
   if (i < 10000000000ULL) {
-    if (i < U32(1e5)) {
-      if (i < U32(1e3)) {
-        if (i < U32(1e2)) {
-          i <<= 1; if (i > 19) *c++ = _c2DigitsLut[i]; *c++ = _c2DigitsLut[++i]; return c;
-        }
-        *c++ = _c3DigitsLut[i *= 3]; *c++ = _c3DigitsLut[++i]; *c++ = _c3DigitsLut[++i]; return c;
+    if (i < U32(1e6)) {
+      if (i < U32(1e2)) {
+        i <<= 1; if (i > 19) *c++ = _c2DigitsLut[i]; *c++ = _c2DigitsLut[++i]; return c;
       }
-      const unsigned short a = static_cast<unsigned short>(i / 100) * 3;
-      if (i > 9999) *c++ = _c3DigitsLut[a]; *c++ = _c3DigitsLut[a + 1]; *c++ = _c3DigitsLut[a + 2];
-      *c++ = _c2DigitsLut[i = (i % 100) << 1]; *c++ = _c2DigitsLut[++i]; return c;
+      unsigned int V = static_cast<unsigned int>(i) / 1000;
+      if (V < 10) {
+        if (V) *c++ = V + 0x30; i = (i - (V * 1000)) * 3;
+        *c++ = _c3DigitsLut[i]; *c++ = _c3DigitsLut[i + 1]; *c++ = _c3DigitsLut[i + 2]; return c;
+      }
+      V *= 3; if (V > 299) *c++ = _c3DigitsLut[V]; *c++ = _c3DigitsLut[++V]; *c++ = _c3DigitsLut[++V];
+      *c++ = _c3DigitsLut[i = i % 1000 * 3]; *c++ = _c3DigitsLut[++i]; *c++ = _c3DigitsLut[++i]; return c;
     }
-    const unsigned int S = static_cast<unsigned int>(i / 1000000);
-    if (S < U32(1e2)) {
-      const unsigned int a = S << 1;
-      if (S > 9) *c++ = _c2DigitsLut[a];
-      *c++ = _c2DigitsLut[a + 1];
-    } else {
-      const unsigned int a = (S / 100) << 1;
-      if (S > 999) *c++ = _c2DigitsLut[a];
-      *c++ = _c2DigitsLut[a + 1];
-      const unsigned int b = (S % 100) << 1;
-      *c++ = _c2DigitsLut[b];
-      *c++ = _c2DigitsLut[b + 1];
+    if (i < U32(1e8)) {
+      unsigned int V = static_cast<unsigned int>(i) / 1000000; V <<= 1;
+      if (V > 19) *c++ = _c2DigitsLut[V]; *c++ = _c2DigitsLut[V + 1];
+      *c++ = _c3DigitsLut[V = static_cast<unsigned int>(i %= 1000000) / 1000 * 3];
+      *c++ = _c3DigitsLut[++V]; *c++ = _c3DigitsLut[++V];
+      *c++ = _c3DigitsLut[i = i % 1000 * 3]; *c++ = _c3DigitsLut[++i]; *c++ = _c3DigitsLut[++i]; return c;
     }
-    i %= 1000000;
-    unsigned long long G = i / 1000 * 3;
-    *c++ = _c3DigitsLut[G];
-    *c++ = _c3DigitsLut[++G];
-    *c++ = _c3DigitsLut[++G];
-    G = (i % 1000) * 3;
-    *c++ = _c3DigitsLut[G];
-    *c++ = _c3DigitsLut[++G];
-    *c++ = _c3DigitsLut[++G]; return c;
+    unsigned int V = static_cast<unsigned int>(i / 100000000); V <<= 1;
+    if (V > 19) *c++ = _c2DigitsLut[V]; *c++ = _c2DigitsLut[V + 1];
+    *c++ = _c3DigitsLut[V = (i %= 100000000) / 100000 * 3]; *c++ = _c3DigitsLut[++V]; *c++ = _c3DigitsLut[++V];
+    *c++ = _c3DigitsLut[V = (i %= 100000) / 100 * 3]; *c++ = _c3DigitsLut[++V]; *c++ = _c3DigitsLut[++V];
+    *c++ = _c2DigitsLut[i = i % 100 * 2]; *c++ = _c2DigitsLut[++i]; return c;
   }
-  unsigned int h = static_cast<unsigned int>(i / 10000000000ULL);
+  unsigned int h = static_cast<unsigned int>(i / 10000000000ULL), V;
   i %= 10000000000ULL;
   if (h < U32(1e6)) {
-    if (h < U32(1e5)) {
-      if (h < U32(1e3)) {
-        if (h < U32(1e2)) {
-          h <<= 1; if (h > 9) *c++ = _c2DigitsLut[h]; *c++ = _c2DigitsLut[++h]; goto $;
-        }
-        *c++ = _c3DigitsLut[h *= 3]; *c++ = _c3DigitsLut[++h]; *c++ = _c3DigitsLut[++h]; goto $;
-      }
-      const unsigned int a = h / 100;
-      if (a < U32(1e2)) {
-        const unsigned int b = a << 1; *c++ = _c2DigitsLut[b]; *c++ = _c2DigitsLut[b + 1];
-        *c++ = _c2DigitsLut[h = (h % 100u) << 1]; *c++ = _c2DigitsLut[++h]; goto $;
-      }
-      const unsigned int b = a * 3; *c++ = _c3DigitsLut[b]; *c++ = _c3DigitsLut[b + 1]; *c++ = _c3DigitsLut[b + 2];
-      *c++ = _c2DigitsLut[h = (h % 100) << 1]; *c++ = _c2DigitsLut[++h]; goto $;
+    if (h < U32(1e2)) {
+      h <<= 1; if (h > 19) *c++ = _c2DigitsLut[h]; *c++ = _c2DigitsLut[++h]; goto $;
     }
-    const unsigned int b = h / 1000 * 3; *c++ = _c3DigitsLut[b]; *c++ = _c3DigitsLut[b + 1]; *c++ = _c3DigitsLut[b + 2];
-    *c++ = _c3DigitsLut[h = (h % 1000) * 3]; *c++ = _c3DigitsLut[++h]; *c++ = _c3DigitsLut[++h];
-  } else {
-    unsigned int V = h / 1000, x = 7; char z = 3; unsigned int F = 3 * (h - (V * 1000));
-    if (V < U32(1e6)) { if (V < U32(1e5)) { if (V < U32(1e4)) { z = 0; x -= 3; goto _; } x -= 2, z = 1; goto _; }  x -= 1, z = 2; }
-  _:c[x] = _c3DigitsLut[F];
-    c[++x] = _c3DigitsLut[++F];
-    c[++x] = _c3DigitsLut[++F];
-    h = V / 1000; x -= 5;
-    F = 3 * (V - (h * 1000));
-    c[x] = _c3DigitsLut[F];
-    c[++x] = _c3DigitsLut[++F];
-    c[++x] = _c3DigitsLut[++F];
-    V = h / 1000; x -= 5;
-    F = 3 * (h - (V * 1000));
-    switch (z) {
-    case 3: c[0] = V + 0x30;
-    case 2: c[x] = _c3DigitsLut[F];
-    case 1: c[x + 1] = _c3DigitsLut[F + 1];
-    case 0: c[x + 2] = _c3DigitsLut[F + 2];
+    V = h / 1000;
+    if (V < 10) {
+      if (V) *c++ = V + 0x30; h = (h - (V * 1000)) * 3;
+      *c++ = _c3DigitsLut[h]; *c++ = _c3DigitsLut[h + 1]; *c++ = _c3DigitsLut[h + 2]; goto $;
     }
-    c += 7 + z;
+    V *= 3; if (V > 299) *c++ = _c3DigitsLut[V]; *c++ = _c3DigitsLut[++V]; *c++ = _c3DigitsLut[++V];
+    *c++ = _c3DigitsLut[h = h % 1000 * 3]; *c++ = _c3DigitsLut[++h]; *c++ = _c3DigitsLut[++h]; goto $;
   }
+  if (h < U32(1e8)) {
+    V = static_cast<unsigned int>(h) / 1000000; V <<= 1;
+    if (V > 19) *c++ = _c2DigitsLut[V]; *c++ = _c2DigitsLut[V + 1];
+    *c++ = _c3DigitsLut[V = static_cast<unsigned int>(h %= 1000000) / 1000 * 3];
+    *c++ = _c3DigitsLut[++V]; *c++ = _c3DigitsLut[++V];
+    *c++ = _c3DigitsLut[h = h % 1000 * 3]; *c++ = _c3DigitsLut[++h]; *c++ = _c3DigitsLut[++h]; goto $;
+  }
+  V = static_cast<unsigned int>(h / 100000000); V <<= 1;
+  if (V > 19) *c++ = _c2DigitsLut[V]; *c++ = _c2DigitsLut[V + 1];
+  *c++ = _c3DigitsLut[V = (h %= 100000000) / 100000 * 3]; *c++ = _c3DigitsLut[++V]; *c++ = _c3DigitsLut[++V];
+  *c++ = _c3DigitsLut[V = (h %= 100000) / 100 * 3]; *c++ = _c3DigitsLut[++V]; *c++ = _c3DigitsLut[++V];
+  *c++ = _c2DigitsLut[V = (h % 100) << 1]; *c++ = _c2DigitsLut[++V];
 $:h = static_cast<unsigned int>(i / 10000000) * 3; i %= 10000000;
   *c++ = _c3DigitsLut[h];
   *c++ = _c3DigitsLut[++h];
@@ -200,8 +156,7 @@ $:h = static_cast<unsigned int>(i / 10000000) * 3; i %= 10000000;
   *c++ = _c3DigitsLut[h];
   *c++ = _c3DigitsLut[++h];
   *c++ = _c3DigitsLut[++h];
-  *c++ = i % 10 + 0x30;
-  return c;
+  *c++ = i % 10 + 0x30; return c;
 }
 //The fastest i64toa fuction
 _INLINE static char* i64toa(char* c, long long i) { if (i < 0) { *c = 45; return u64toa(++c, ~--i); } return u64toa(c, i); }
