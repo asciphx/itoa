@@ -46,7 +46,7 @@ static __ALIGN(1) volatile char _c2DigitsLut[0xc9] =
 "5051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899";
 //The fastest htoa fuction
 _INLINE static char* h2a(char* c, unsigned char i) {
-  if (i < U32(1e2)) { i <<= 1; if (i > 9) *c++ = _c2DigitsLut[i]; *c++ = _c2DigitsLut[++i]; return c; }
+  if (i < U32(1e2)) { i <<= 1; if (i > 19) *c++ = _c2DigitsLut[i]; *c++ = _c2DigitsLut[++i]; return c; }
   *c++ = _c3DigitsLut[i *= 3]; *c++ = _c3DigitsLut[++i]; *c++ = _c3DigitsLut[++i]; return c;
 }
 //The fastest atoa fuction
@@ -55,7 +55,7 @@ _INLINE static char* a2a(char* c, char i) { if (i < 0) { *c = 45; return h2a(++c
 _INLINE static char* t2a(char* c, unsigned short i) {
   if (i < U32(1e3)) {
     if (i < U32(1e2)) {
-      i <<= 1; if (i > 9) *c++ = _c2DigitsLut[i]; *c++ = _c2DigitsLut[++i]; return c;
+      i <<= 1; if (i > 19) *c++ = _c2DigitsLut[i]; *c++ = _c2DigitsLut[++i]; return c;
     }
     *c++ = _c3DigitsLut[i *= 3]; *c++ = _c3DigitsLut[++i]; *c++ = _c3DigitsLut[++i]; return c;
   }
@@ -69,7 +69,7 @@ _INLINE static char* u2a(char* c, unsigned int i) {
   if (i < U32(1e5)) {
     if (i < U32(1e3)) {
       if (i < U32(1e2)) {
-        i <<= 1; if (i > 9) *c++ = _c2DigitsLut[i]; *c++ = _c2DigitsLut[++i]; return c;
+        i <<= 1; if (i > 19) *c++ = _c2DigitsLut[i]; *c++ = _c2DigitsLut[++i]; return c;
       }
       *c++ = _c3DigitsLut[i *= 3]; *c++ = _c3DigitsLut[++i]; *c++ = _c3DigitsLut[++i]; return c;
     }
@@ -116,7 +116,7 @@ _INLINE static char* u64toa(char* c, unsigned long long i) {
     if (i < U32(1e5)) {
       if (i < U32(1e3)) {
         if (i < U32(1e2)) {
-          i <<= 1; if (i > 9) *c++ = _c2DigitsLut[i]; *c++ = _c2DigitsLut[++i]; return c;
+          i <<= 1; if (i > 19) *c++ = _c2DigitsLut[i]; *c++ = _c2DigitsLut[++i]; return c;
         }
         *c++ = _c3DigitsLut[i *= 3]; *c++ = _c3DigitsLut[++i]; *c++ = _c3DigitsLut[++i]; return c;
       }
