@@ -1283,89 +1283,273 @@ static __ALIGN(2) const char _c2DigitsLut[100][2] = {
   ,{'8','0'},{'8','1'},{'8','2'},{'8','3'},{'8','4'},{'8','5'},{'8','6'},{'8','7'},{'8','8'},{'8','9'}
   ,{'9','0'},{'9','1'},{'9','2'},{'9','3'},{'9','4'},{'9','5'},{'9','6'},{'9','7'},{'9','8'},{'9','9'}
 };
-//The fastest htoa fuction
-char* h2a(char* c, unsigned char i) {
-  if (i < 100) { if (i > 9) *c++ = _c2DigitsLut[i][0]; *c++ = _c2DigitsLut[i][1]; return c; }
-  unsigned char u = i / 100; *c++ = u + 0x30; i -= u * 100; *c++ = _c2DigitsLut[i][0]; *c++ = _c2DigitsLut[i][1]; return c;
-}
-//The fastest ttoa fuction
-char* t2a(char* c, unsigned short i) {
-  const char* r;
-  if (i < 10000) {
-    if (i < 100) {
-      r = _c2DigitsLut[i]; if (i > 9) *c++ = r[0]; *c++ = r[1]; return c;
-    }
-    r = _c4DigitsLut[i]; if (i > 999) *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; return c;
+// The fastest htoa fuction
+char *h2a(char *c, unsigned char i) {
+  if (i < 100) {
+    if (i > 9)
+      *c++ = _c2DigitsLut[i][0];
+    *c++ = _c2DigitsLut[i][1];
+    return c;
   }
-  unsigned char u =(char)(i / 10000); *c++ = u + 0x30; i -= u * 10000;
-  r = _c4DigitsLut[i]; *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; return c;
+  unsigned char u = i / 100;
+  *c++ = u + 0x30;
+  i -= u * 100;
+  *c++ = _c2DigitsLut[i][0];
+  *c++ = _c2DigitsLut[i][1];
+  return c;
 }
-//The fastest utoa fuction
-char* u2a(char* c, unsigned int i) {
-  const char* r;
+// The fastest ttoa fuction
+char *t2a(char *c, unsigned short i) {
+  const char *r;
   if (i < 10000) {
     if (i < 100) {
-      r = _c2DigitsLut[i]; if (i > 9) *c++ = r[0]; *c++ = r[1]; return c;
+      r = _c2DigitsLut[i];
+      if (i > 9)
+        *c++ = r[0];
+      *c++ = r[1];
+      return c;
     }
-    r = _c4DigitsLut[i]; if (i > 999) *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; return c;
+    r = _c4DigitsLut[i];
+    if (i > 999)
+      *c++ = r[0];
+    *c++ = r[1];
+    *c++ = r[2];
+    *c++ = r[3];
+    return c;
+  }
+  unsigned char u = (char)(i / 10000);
+  *c++ = u + 0x30;
+  i -= u * 10000;
+  r = _c4DigitsLut[i];
+  *c++ = r[0];
+  *c++ = r[1];
+  *c++ = r[2];
+  *c++ = r[3];
+  return c;
+}
+// The fastest utoa fuction
+char *u2a(char *c, unsigned int i) {
+  const char *r;
+  if (i < 10000) {
+    if (i < 100) {
+      r = _c2DigitsLut[i];
+      if (i > 9)
+        *c++ = r[0];
+      *c++ = r[1];
+      return c;
+    }
+    r = _c4DigitsLut[i];
+    if (i > 999)
+      *c++ = r[0];
+    *c++ = r[1];
+    *c++ = r[2];
+    *c++ = r[3];
+    return c;
   }
   if (i < 100000000) {
     if (i < 1000000) {
-      unsigned int u =(unsigned int)(i / 10000); if (u > 9) *c++ = _c2DigitsLut[u][0]; *c++ = _c2DigitsLut[u][1];
-      i -= u * 10000; r = _c4DigitsLut[i]; *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; return c;
+      unsigned int u = (unsigned int)(i / 10000);
+      if (u > 9)
+        *c++ = _c2DigitsLut[u][0];
+      *c++ = _c2DigitsLut[u][1];
+      i -= u * 10000;
+      r = _c4DigitsLut[i];
+      *c++ = r[0];
+      *c++ = r[1];
+      *c++ = r[2];
+      *c++ = r[3];
+      return c;
     }
-    unsigned int u =(unsigned int)(i / 10000); r = _c4DigitsLut[u]; i -= u * 10000;
-    if (u > 999) *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; r = _c4DigitsLut[i];
-    *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; return c;
+    unsigned int u = (unsigned int)(i / 10000);
+    r = _c4DigitsLut[u];
+    i -= u * 10000;
+    if (u > 999)
+      *c++ = r[0];
+    *c++ = r[1];
+    *c++ = r[2];
+    *c++ = r[3];
+    r = _c4DigitsLut[i];
+    *c++ = r[0];
+    *c++ = r[1];
+    *c++ = r[2];
+    *c++ = r[3];
+    return c;
   }
-  unsigned int u =(unsigned int)(i / 1000000); r = _c4DigitsLut[u]; i -= u * 1000000;
-  if (u > 999) *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; u =(unsigned int)(i / 100); r = _c4DigitsLut[u]; i -= u * 100;
-  *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; r = _c2DigitsLut[i]; *c++ = r[0]; *c++ = r[1]; return c;
+  unsigned int u = (unsigned int)(i / 1000000);
+  r = _c4DigitsLut[u];
+  i -= u * 1000000;
+  if (u > 999)
+    *c++ = r[0];
+  *c++ = r[1];
+  *c++ = r[2];
+  *c++ = r[3];
+  u = (unsigned int)(i / 100);
+  r = _c4DigitsLut[u];
+  i -= u * 100;
+  *c++ = r[0];
+  *c++ = r[1];
+  *c++ = r[2];
+  *c++ = r[3];
+  r = _c2DigitsLut[i];
+  *c++ = r[0];
+  *c++ = r[1];
+  return c;
 }
-//The fastest u64toa fuction
-char* u64toa(char* c, unsigned long long i) {
-  const char* r; unsigned int u;
+// The fastest u64toa fuction
+char *u64toa(char *c, unsigned long long i) {
+  const char *r;
+  unsigned int u;
   if (i < 10000) {
     if (i < 100) {
-      r = _c2DigitsLut[i]; if (i > 9) *c++ = r[0]; *c++ = r[1]; return c;
+      r = _c2DigitsLut[i];
+      if (i > 9)
+        *c++ = r[0];
+      *c++ = r[1];
+      return c;
     }
-    r = _c4DigitsLut[i]; if (i > 999) *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; return c;
+    r = _c4DigitsLut[i];
+    if (i > 999)
+      *c++ = r[0];
+    *c++ = r[1];
+    *c++ = r[2];
+    *c++ = r[3];
+    return c;
   }
   if (i < 100000000) {
     if (i < 1000000) {
-      u =(unsigned int)(i / 10000); if (u > 9) *c++ = _c2DigitsLut[u][0]; *c++ = _c2DigitsLut[u][1];
-      i -= u * 10000; r = _c4DigitsLut[i]; *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; return c;
+      u = (unsigned int)(i / 10000);
+      if (u > 9)
+        *c++ = _c2DigitsLut[u][0];
+      *c++ = _c2DigitsLut[u][1];
+      i -= u * 10000;
+      r = _c4DigitsLut[i];
+      *c++ = r[0];
+      *c++ = r[1];
+      *c++ = r[2];
+      *c++ = r[3];
+      return c;
     }
-    u =(unsigned int)(i / 10000); r = _c4DigitsLut[u]; i -= u * 10000;
-    if (u > 999) *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; r = _c4DigitsLut[i];
-    *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; return c;
+    u = (unsigned int)(i / 10000);
+    r = _c4DigitsLut[u];
+    i -= u * 10000;
+    if (u > 999)
+      *c++ = r[0];
+    *c++ = r[1];
+    *c++ = r[2];
+    *c++ = r[3];
+    r = _c4DigitsLut[i];
+    *c++ = r[0];
+    *c++ = r[1];
+    *c++ = r[2];
+    *c++ = r[3];
+    return c;
   }
   if (i < 1000000000000ULL) {
     if (i < 10000000000ULL) {
-      u =(unsigned int)(i / 1000000); r = _c4DigitsLut[u]; i -= u * 1000000;
-      if (u > 999) *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; u =(unsigned int)(i / 100); r = _c4DigitsLut[u]; i -= u * 100;
-      *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; r = _c2DigitsLut[i]; *c++ = r[0]; *c++ = r[1]; return c;
+      u = (unsigned int)(i / 1000000);
+      r = _c4DigitsLut[u];
+      i -= u * 1000000;
+      if (u > 999)
+        *c++ = r[0];
+      *c++ = r[1];
+      *c++ = r[2];
+      *c++ = r[3];
+      u = (unsigned int)(i / 100);
+      r = _c4DigitsLut[u];
+      i -= u * 100;
+      *c++ = r[0];
+      *c++ = r[1];
+      *c++ = r[2];
+      *c++ = r[3];
+      r = _c2DigitsLut[i];
+      *c++ = r[0];
+      *c++ = r[1];
+      return c;
     }
-    u =(unsigned int)(i / 100000000); r = _c4DigitsLut[u]; i -= u * 1000000;
-    if (u > 999) *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; u =(unsigned int)(i / 10000); r = _c4DigitsLut[u]; i -= u * 10000;
-    *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; r = _c4DigitsLut[i]; *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; return c;
+    u = (unsigned int)(i / 100000000);
+    r = _c4DigitsLut[u];
+    i -= u * 1000000;
+    if (u > 999)
+      *c++ = r[0];
+    *c++ = r[1];
+    *c++ = r[2];
+    *c++ = r[3];
+    u = (unsigned int)(i / 10000);
+    r = _c4DigitsLut[u];
+    i -= u * 10000;
+    *c++ = r[0];
+    *c++ = r[1];
+    *c++ = r[2];
+    *c++ = r[3];
+    r = _c4DigitsLut[i];
+    *c++ = r[0];
+    *c++ = r[1];
+    *c++ = r[2];
+    *c++ = r[3];
+    return c;
   }
-  unsigned int h =(unsigned int)(i / 1000000000000ULL);
+  unsigned int h = (unsigned int)(i / 1000000000000ULL);
   i %= 1000000000000ULL;
   if (h < 10000) {
     if (h < 100) {
-      if (h > 9) *c++ = _c2DigitsLut[h][0]; *c++ = _c2DigitsLut[h][1]; goto $;
+      if (h > 9)
+        *c++ = _c2DigitsLut[h][0];
+      *c++ = _c2DigitsLut[h][1];
+      goto $;
     }
-    r = _c4DigitsLut[h]; if (h > 999) *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; goto $;
+    r = _c4DigitsLut[h];
+    if (h > 999)
+      *c++ = r[0];
+    *c++ = r[1];
+    *c++ = r[2];
+    *c++ = r[3];
+    goto $;
   }
   if (h < 1000000) {
-    u =(unsigned int)(h / 10000); if (u > 9) *c++ = _c2DigitsLut[u][0]; *c++ = _c2DigitsLut[u][1];
-    h -= u * 10000; r = _c4DigitsLut[h]; *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; goto $;
+    u = (unsigned int)(h / 10000);
+    if (u > 9)
+      *c++ = _c2DigitsLut[u][0];
+    *c++ = _c2DigitsLut[u][1];
+    h -= u * 10000;
+    r = _c4DigitsLut[h];
+    *c++ = r[0];
+    *c++ = r[1];
+    *c++ = r[2];
+    *c++ = r[3];
+    goto $;
   }
-  u =(unsigned int)(h / 10000); r = _c4DigitsLut[u]; h -= u * 10000;
-  if (u > 999) *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; r = _c4DigitsLut[h];
-  *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3];
-$:h =(unsigned int)(i / 100000000); r = _c4DigitsLut[h]; *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3];
-  i %= 100000000; h =(unsigned int)(i / 10000); i -= h * 10000; r = _c4DigitsLut[h]; *c++ = r[0]; *c++ = r[1];
-  *c++ = r[2]; *c++ = r[3]; r = _c4DigitsLut[i];  *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; return c;
+  u = (unsigned int)(h / 10000);
+  r = _c4DigitsLut[u];
+  h -= u * 10000;
+  if (u > 999)
+    *c++ = r[0];
+  *c++ = r[1];
+  *c++ = r[2];
+  *c++ = r[3];
+  r = _c4DigitsLut[h];
+  *c++ = r[0];
+  *c++ = r[1];
+  *c++ = r[2];
+  *c++ = r[3];
+$:
+  h = (unsigned int)(i / 100000000);
+  r = _c4DigitsLut[h];
+  *c++ = r[0];
+  *c++ = r[1];
+  *c++ = r[2];
+  *c++ = r[3];
+  i %= 100000000;
+  h = (unsigned int)(i / 10000);
+  i -= h * 10000;
+  r = _c4DigitsLut[h];
+  *c++ = r[0];
+  *c++ = r[1];
+  *c++ = r[2];
+  *c++ = r[3];
+  r = _c4DigitsLut[i];
+  *c++ = r[0];
+  *c++ = r[1];
+  *c++ = r[2];
+  *c++ = r[3];
+  return c;
 }

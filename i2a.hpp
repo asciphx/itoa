@@ -5,12 +5,13 @@
 *
 * Copyright (C) 2023 Asciphx
 *
-* Permissions of this strongest copyleft license are conditioned on making available
-* complete source code of licensed works and modifications, which include larger works
-* using a licensed work, under the same license. Copyright and license notices must be
-* preserved. Contributors provide an express grant of patent rights. When a modified
-* version is used to provide a service over a network, the complete source code of
-* the modified version must be made available.
+* Permissions of this strongest copyleft license are conditioned on making
+* available complete source code of licensed works and modifications, which
+* include larger works using a licensed work, under the same license. Copyright
+* and license notices must be preserved. Contributors provide an express grant
+* of patent rights. When a modified version is used to provide a service over a
+* network, the complete source code of the modified version must be made
+* available.
 */
 #if defined(_WIN32)
 #define __ALIGN(_) __declspec(align(_))
@@ -21,7 +22,7 @@
 #endif
 using U32 = unsigned int;
 static __ALIGN(4) const char _c4DigitsLut[10000][4] = {
-   {'0','0','0','0'},{'0','0','0','1'},{'0','0','0','2'},{'0','0','0','3'},{'0','0','0','4'},{'0','0','0','5'},{'0','0','0','6'},{'0','0','0','7'}
+  {'0','0','0','0'},{'0','0','0','1'},{'0','0','0','2'},{'0','0','0','3'},{'0','0','0','4'},{'0','0','0','5'},{'0','0','0','6'},{'0','0','0','7'}
   ,{'0','0','0','8'},{'0','0','0','9'},{'0','0','1','0'},{'0','0','1','1'},{'0','0','1','2'},{'0','0','1','3'},{'0','0','1','4'},{'0','0','1','5'}
   ,{'0','0','1','6'},{'0','0','1','7'},{'0','0','1','8'},{'0','0','1','9'},{'0','0','2','0'},{'0','0','2','1'},{'0','0','2','2'},{'0','0','2','3'}
   ,{'0','0','2','4'},{'0','0','2','5'},{'0','0','2','6'},{'0','0','2','7'},{'0','0','2','8'},{'0','0','2','9'},{'0','0','3','0'},{'0','0','3','1'}
@@ -1273,7 +1274,7 @@ static __ALIGN(4) const char _c4DigitsLut[10000][4] = {
   ,{'9','9','9','2'},{'9','9','9','3'},{'9','9','9','4'},{'9','9','9','5'},{'9','9','9','6'},{'9','9','9','7'},{'9','9','9','8'},{'9','9','9','9'}
 };
 static __ALIGN(2) const char _c2DigitsLut[100][2] = {
-   {'0','0'},{'0','1'},{'0','2'},{'0','3'},{'0','4'},{'0','5'},{'0','6'},{'0','7'},{'0','8'},{'0','9'}
+  {'0','0'},{'0','1'},{'0','2'},{'0','3'},{'0','4'},{'0','5'},{'0','6'},{'0','7'},{'0','8'},{'0','9'}
   ,{'1','0'},{'1','1'},{'1','2'},{'1','3'},{'1','4'},{'1','5'},{'1','6'},{'1','7'},{'1','8'},{'1','9'}
   ,{'2','0'},{'2','1'},{'2','2'},{'2','3'},{'2','4'},{'2','5'},{'2','6'},{'2','7'},{'2','8'},{'2','9'}
   ,{'3','0'},{'3','1'},{'3','2'},{'3','3'},{'3','4'},{'3','5'},{'3','6'},{'3','7'},{'3','8'},{'3','9'}
@@ -1284,100 +1285,308 @@ static __ALIGN(2) const char _c2DigitsLut[100][2] = {
   ,{'8','0'},{'8','1'},{'8','2'},{'8','3'},{'8','4'},{'8','5'},{'8','6'},{'8','7'},{'8','8'},{'8','9'}
   ,{'9','0'},{'9','1'},{'9','2'},{'9','3'},{'9','4'},{'9','5'},{'9','6'},{'9','7'},{'9','8'},{'9','9'}
 };
-//The fastest htoa fuction
+// The fastest htoa fuction
 _INLINE static char* h2a(char* c, unsigned char i) {
-  if (i < U32(1e2)) { if (i > 9) *c++ = _c2DigitsLut[i][0]; *c++ = _c2DigitsLut[i][1]; return c; }
-  unsigned char u = i / 100; *c++ = u + 0x30; i -= u * 100; *c++ = _c2DigitsLut[i][0]; *c++ = _c2DigitsLut[i][1]; return c;
+  if (i < U32(1e2)) {
+    if (i > 9)
+      *c++ = _c2DigitsLut[i][0];
+    *c++ = _c2DigitsLut[i][1];
+    return c;
+  }
+  unsigned char u = i / 100;
+  *c++ = u + 0x30;
+  i -= u * 100;
+  *c++ = _c2DigitsLut[i][0];
+  *c++ = _c2DigitsLut[i][1];
+  return c;
 }
-//The fastest atoa fuction
-_INLINE static char* a2a(char* c, char i) { if (i < 0) { *c = 45; return h2a(++c, ~--i); } return h2a(c, i); }
-//The fastest ttoa fuction
+// The fastest atoa fuction
+_INLINE static char* a2a(char* c, char i) {
+  if (i < 0) {
+    *c = 45;
+    return h2a(++c, ~--i);
+  }
+  return h2a(c, i);
+}
+// The fastest ttoa fuction
 _INLINE static char* t2a(char* c, unsigned short i) {
   const char* r;
   if (i < U32(1e4)) {
     if (i < U32(1e2)) {
-      r = _c2DigitsLut[i]; if (i > 9) *c++ = r[0]; *c++ = r[1]; return c;
+      r = _c2DigitsLut[i];
+      if (i > 9)
+        *c++ = r[0];
+      *c++ = r[1];
+      return c;
     }
-    r = _c4DigitsLut[i]; if (i > 999) *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; return c;
+    r = _c4DigitsLut[i];
+    if (i > 999)
+      *c++ = r[0];
+    *c++ = r[1];
+    *c++ = r[2];
+    *c++ = r[3];
+    return c;
   }
-  unsigned char u = static_cast<char>(i / 10000); *c++ = u + 0x30; i -= u * 10000;
-  r = _c4DigitsLut[i]; *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; return c;
+  unsigned char u = static_cast<char>(i / 10000);
+  *c++ = u + 0x30;
+  i -= u * 10000;
+  r = _c4DigitsLut[i];
+  *c++ = r[0];
+  *c++ = r[1];
+  *c++ = r[2];
+  *c++ = r[3];
+  return c;
 }
-//The fastest stoa fuction
-_INLINE static char* s2a(char* c, short i) { if (i < 0) { *c = 45; return t2a(++c, ~--i); } return t2a(c, i); }
-//The fastest utoa fuction
+// The fastest stoa fuction
+_INLINE static char* s2a(char* c, short i) {
+  if (i < 0) {
+    *c = 45;
+    return t2a(++c, ~--i);
+  }
+  return t2a(c, i);
+}
+// The fastest utoa fuction
 _INLINE static char* u2a(char* c, unsigned int i) {
   const char* r;
   if (i < U32(1e4)) {
     if (i < U32(1e2)) {
-      r = _c2DigitsLut[i]; if (i > 9) *c++ = r[0]; *c++ = r[1]; return c;
+      r = _c2DigitsLut[i];
+      if (i > 9)
+        *c++ = r[0];
+      *c++ = r[1];
+      return c;
     }
-    r = _c4DigitsLut[i]; if (i > 999) *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; return c;
+    r = _c4DigitsLut[i];
+    if (i > 999)
+      *c++ = r[0];
+    *c++ = r[1];
+    *c++ = r[2];
+    *c++ = r[3];
+    return c;
   }
   if (i < U32(1e8)) {
     if (i < U32(1e6)) {
-      unsigned int u = static_cast<unsigned int>(i / 10000); if (u > 9) *c++ = _c2DigitsLut[u][0]; *c++ = _c2DigitsLut[u][1];
-      i -= u * 10000; r = _c4DigitsLut[i]; *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; return c;
+      unsigned int u = static_cast<unsigned int>(i / 10000);
+      if (u > 9)
+        *c++ = _c2DigitsLut[u][0];
+      *c++ = _c2DigitsLut[u][1];
+      i -= u * 10000;
+      r = _c4DigitsLut[i];
+      *c++ = r[0];
+      *c++ = r[1];
+      *c++ = r[2];
+      *c++ = r[3];
+      return c;
     }
-    unsigned int u = static_cast<unsigned int>(i / 10000); r = _c4DigitsLut[u]; i -= u * 10000;
-    if (u > 999) *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; r = _c4DigitsLut[i];
-    *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; return c;
+    unsigned int u = static_cast<unsigned int>(i / 10000);
+    r = _c4DigitsLut[u];
+    i -= u * 10000;
+    if (u > 999)
+      *c++ = r[0];
+    *c++ = r[1];
+    *c++ = r[2];
+    *c++ = r[3];
+    r = _c4DigitsLut[i];
+    *c++ = r[0];
+    *c++ = r[1];
+    *c++ = r[2];
+    *c++ = r[3];
+    return c;
   }
-  unsigned int u = static_cast<unsigned int>(i / 1000000); r = _c4DigitsLut[u]; i -= u * 1000000;
-  if (u > 999) *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; u = static_cast<unsigned int>(i / 100); r = _c4DigitsLut[u]; i -= u * 100;
-  *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; r = _c2DigitsLut[i]; *c++ = r[0]; *c++ = r[1]; return c;
+  unsigned int u = static_cast<unsigned int>(i / 1000000);
+  r = _c4DigitsLut[u];
+  i -= u * 1000000;
+  if (u > 999)
+    *c++ = r[0];
+  *c++ = r[1];
+  *c++ = r[2];
+  *c++ = r[3];
+  u = static_cast<unsigned int>(i / 100);
+  r = _c4DigitsLut[u];
+  i -= u * 100;
+  *c++ = r[0];
+  *c++ = r[1];
+  *c++ = r[2];
+  *c++ = r[3];
+  r = _c2DigitsLut[i];
+  *c++ = r[0];
+  *c++ = r[1];
+  return c;
 }
-//The fastest itoa fuction
-_INLINE static char* i2a(char* c, int i) { if (i < 0) { *c = 45; return u2a(++c, ~--i); } return u2a(c, i); }
-//The fastest u64toa fuction
+// The fastest itoa fuction
+_INLINE static char* i2a(char* c, int i) {
+  if (i < 0) {
+    *c = 45;
+    return u2a(++c, ~--i);
+  }
+  return u2a(c, i);
+}
+// The fastest u64toa fuction
 _INLINE static char* u64toa(char* c, unsigned long long i) {
-  const char* r; unsigned int u;
+  const char* r;
+  unsigned int u;
   if (i < U32(1e4)) {
     if (i < U32(1e2)) {
-      r = _c2DigitsLut[i]; if (i > 9) *c++ = r[0]; *c++ = r[1]; return c;
+      r = _c2DigitsLut[i];
+      if (i > 9)
+        *c++ = r[0];
+      *c++ = r[1];
+      return c;
     }
-    r = _c4DigitsLut[i]; if (i > 999) *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; return c;
+    r = _c4DigitsLut[i];
+    if (i > 999)
+      *c++ = r[0];
+    *c++ = r[1];
+    *c++ = r[2];
+    *c++ = r[3];
+    return c;
   }
   if (i < U32(1e8)) {
     if (i < U32(1e6)) {
-      u = static_cast<unsigned int>(i / 10000); if (u > 9) *c++ = _c2DigitsLut[u][0]; *c++ = _c2DigitsLut[u][1];
-      i -= u * 10000; r = _c4DigitsLut[i]; *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; return c;
+      u = static_cast<unsigned int>(i / 10000);
+      if (u > 9)
+        *c++ = _c2DigitsLut[u][0];
+      *c++ = _c2DigitsLut[u][1];
+      i -= u * 10000;
+      r = _c4DigitsLut[i];
+      *c++ = r[0];
+      *c++ = r[1];
+      *c++ = r[2];
+      *c++ = r[3];
+      return c;
     }
-    u = static_cast<unsigned int>(i / 10000); r = _c4DigitsLut[u]; i -= u * 10000;
-    if (u > 999) *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; r = _c4DigitsLut[i];
-    *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; return c;
+    u = static_cast<unsigned int>(i / 10000);
+    r = _c4DigitsLut[u];
+    i -= u * 10000;
+    if (u > 999)
+      *c++ = r[0];
+    *c++ = r[1];
+    *c++ = r[2];
+    *c++ = r[3];
+    r = _c4DigitsLut[i];
+    *c++ = r[0];
+    *c++ = r[1];
+    *c++ = r[2];
+    *c++ = r[3];
+    return c;
   }
   if (i < 1000000000000ULL) {
     if (i < 10000000000ULL) {
-      u = static_cast<unsigned int>(i / 1000000); r = _c4DigitsLut[u]; i -= u * 1000000;
-      if (u > 999) *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; u = static_cast<unsigned int>(i / 100); r = _c4DigitsLut[u]; i -= u * 100;
-      *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; r = _c2DigitsLut[i]; *c++ = r[0]; *c++ = r[1]; return c;
+      u = static_cast<unsigned int>(i / 1000000);
+      r = _c4DigitsLut[u];
+      i -= u * 1000000;
+      if (u > 999)
+        *c++ = r[0];
+      *c++ = r[1];
+      *c++ = r[2];
+      *c++ = r[3];
+      u = static_cast<unsigned int>(i / 100);
+      r = _c4DigitsLut[u];
+      i -= u * 100;
+      *c++ = r[0];
+      *c++ = r[1];
+      *c++ = r[2];
+      *c++ = r[3];
+      r = _c2DigitsLut[i];
+      *c++ = r[0];
+      *c++ = r[1];
+      return c;
     }
-    u = static_cast<unsigned int>(i / 100000000); r = _c4DigitsLut[u]; i -= u * 1000000;
-    if (u > 999) *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; u = static_cast<unsigned int>(i / 10000); r = _c4DigitsLut[u]; i -= u * 10000;
-    *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; r = _c4DigitsLut[i]; *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; return c;
+    u = static_cast<unsigned int>(i / 100000000);
+    r = _c4DigitsLut[u];
+    i -= u * 1000000;
+    if (u > 999)
+      *c++ = r[0];
+    *c++ = r[1];
+    *c++ = r[2];
+    *c++ = r[3];
+    u = static_cast<unsigned int>(i / 10000);
+    r = _c4DigitsLut[u];
+    i -= u * 10000;
+    *c++ = r[0];
+    *c++ = r[1];
+    *c++ = r[2];
+    *c++ = r[3];
+    r = _c4DigitsLut[i];
+    *c++ = r[0];
+    *c++ = r[1];
+    *c++ = r[2];
+    *c++ = r[3];
+    return c;
   }
   unsigned int h = static_cast<unsigned int>(i / 1000000000000ULL);
   i %= 1000000000000ULL;
   if (h < U32(1e4)) {
     if (h < U32(1e2)) {
-      if (h > 9) *c++ = _c2DigitsLut[h][0]; *c++ = _c2DigitsLut[h][1]; goto $;
+      if (h > 9)
+        *c++ = _c2DigitsLut[h][0];
+      *c++ = _c2DigitsLut[h][1];
+      goto $;
     }
-    r = _c4DigitsLut[h]; if (h > 999) *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; goto $;
+    r = _c4DigitsLut[h];
+    if (h > 999)
+      *c++ = r[0];
+    *c++ = r[1];
+    *c++ = r[2];
+    *c++ = r[3];
+    goto $;
   }
   if (h < U32(1e6)) {
-    u = static_cast<unsigned int>(h / 10000); if (u > 9) *c++ = _c2DigitsLut[u][0]; *c++ = _c2DigitsLut[u][1];
-    h -= u * 10000; r = _c4DigitsLut[h]; *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; goto $;
+    u = static_cast<unsigned int>(h / 10000);
+    if (u > 9)
+      *c++ = _c2DigitsLut[u][0];
+    *c++ = _c2DigitsLut[u][1];
+    h -= u * 10000;
+    r = _c4DigitsLut[h];
+    *c++ = r[0];
+    *c++ = r[1];
+    *c++ = r[2];
+    *c++ = r[3];
+    goto $;
   }
-  u = static_cast<unsigned int>(h / 10000); r = _c4DigitsLut[u]; h -= u * 10000;
-  if (u > 999) *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; r = _c4DigitsLut[h];
-  *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3];
-$:h = static_cast<unsigned int>(i / 100000000); r = _c4DigitsLut[h]; *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3];
-  i %= 100000000; h = static_cast<unsigned int>(i / 10000); i -= h * 10000; r = _c4DigitsLut[h]; *c++ = r[0]; *c++ = r[1];
-  *c++ = r[2]; *c++ = r[3]; r = _c4DigitsLut[i];  *c++ = r[0]; *c++ = r[1]; *c++ = r[2]; *c++ = r[3]; return c;
+  u = static_cast<unsigned int>(h / 10000);
+  r = _c4DigitsLut[u];
+  h -= u * 10000;
+  if (u > 999)
+    *c++ = r[0];
+  *c++ = r[1];
+  *c++ = r[2];
+  *c++ = r[3];
+  r = _c4DigitsLut[h];
+  *c++ = r[0];
+  *c++ = r[1];
+  *c++ = r[2];
+  *c++ = r[3];
+$:
+  h = static_cast<unsigned int>(i / 100000000);
+  r = _c4DigitsLut[h];
+  *c++ = r[0];
+  *c++ = r[1];
+  *c++ = r[2];
+  *c++ = r[3];
+  i %= 100000000;
+  h = static_cast<unsigned int>(i / 10000);
+  i -= h * 10000;
+  r = _c4DigitsLut[h];
+  *c++ = r[0];
+  *c++ = r[1];
+  *c++ = r[2];
+  *c++ = r[3];
+  r = _c4DigitsLut[i];
+  *c++ = r[0];
+  *c++ = r[1];
+  *c++ = r[2];
+  *c++ = r[3];
+  return c;
 }
-//The fastest i64toa fuction
-_INLINE static char* i64toa(char* c, long long i) { if (i < 0) { *c = 45; return u64toa(++c, ~--i); } return u64toa(c, i); }
+// The fastest i64toa fuction
+_INLINE static char* i64toa(char* c, long long i) {
+  if (i < 0) {
+    *c = 45;
+    return u64toa(++c, ~--i);
+  }
+  return u64toa(c, i);
+}
 #undef __ALIGN
 #undef _INLINE
 #endif // I2A_HPP

@@ -17,9 +17,10 @@ cmake --build ./build --config Release
 
 ```
 ## Features
-- If the inline C++ version is required, the performance will be improved by about 65%
-- There is no need for SSE instruction set optimization, and the performance of very large integers has increased by more than 100%
+- If the inline C++ version is required, the performance will be improved by about 100%
+- There is no need for SSE instruction set optimization, and the performance of very large integers has increased by more than 100000%
 - The header file is separated from the source file, without too much inlining, preventing slow compilation
+- ![test](./test.jpg)
 
 ## illustrate
 - See C++ version for details[https://github.com/asciphx/FabCc/blob/main/fc/include/hpp/i2a.hpp](https://github.com/asciphx/FabCc/blob/main/fc/include/hpp/i2a.hpp)
@@ -30,5 +31,5 @@ Prediction, comprehensive performance comparison with SSE is roughly as follows
 |Function |Time (ns)|Speedup|
 |---------|--------:|------:|
 |sse2     |    7.614| 25.51x|
-|i2a      |    6.751| 28.55x|
+|i2a      |    3.685| 53.15x|
 |null     |    2.230| 87.09x|
