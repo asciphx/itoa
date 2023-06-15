@@ -22,7 +22,7 @@
 #endif
 using U32 = unsigned int;
 static __ALIGN(4) const char _c4DigitsLut[10000][4] = {
-  {48,48,48,48},{48,48,48,49},{48,48,48,50},{48,48,48,51},{48,48,48,52},{48,48,48,53},{48,48,48,54},{48,48,48,55}
+   {48,48,48,48},{48,48,48,49},{48,48,48,50},{48,48,48,51},{48,48,48,52},{48,48,48,53},{48,48,48,54},{48,48,48,55}
   ,{48,48,48,56},{48,48,48,57},{48,48,49,48},{48,48,49,49},{48,48,49,50},{48,48,49,51},{48,48,49,52},{48,48,49,53}
   ,{48,48,49,54},{48,48,49,55},{48,48,49,56},{48,48,49,57},{48,48,50,48},{48,48,50,49},{48,48,50,50},{48,48,50,51}
   ,{48,48,50,52},{48,48,50,53},{48,48,50,54},{48,48,50,55},{48,48,50,56},{48,48,50,57},{48,48,51,48},{48,48,51,49}
@@ -1274,7 +1274,7 @@ static __ALIGN(4) const char _c4DigitsLut[10000][4] = {
   ,{57,57,57,50},{57,57,57,51},{57,57,57,52},{57,57,57,53},{57,57,57,54},{57,57,57,55},{57,57,57,56},{57,57,57,57}
 };
 static __ALIGN(2) const char _c2DigitsLut[100][2] = {
-  {48,48},{48,49},{48,50},{48,51},{48,52},{48,53},{48,54},{48,55},{48,56},{48,57}
+   {48,48},{48,49},{48,50},{48,51},{48,52},{48,53},{48,54},{48,55},{48,56},{48,57}
   ,{49,48},{49,49},{49,50},{49,51},{49,52},{49,53},{49,54},{49,55},{49,56},{49,57}
   ,{50,48},{50,49},{50,50},{50,51},{50,52},{50,53},{50,54},{50,55},{50,56},{50,57}
   ,{51,48},{51,49},{51,50},{51,51},{51,52},{51,53},{51,54},{51,55},{51,56},{51,57}
@@ -1331,11 +1331,11 @@ _INLINE static char* t2a(char* c, unsigned short i) {
   *c++ = u + 0x30;
   i -= u * 10000;
   r = _c4DigitsLut[i];
-  *c++ = r[0];
-  *c++ = r[1];
-  *c++ = r[2];
-  *c++ = r[3];
-  return c;
+  *c = *r;
+  *++c = *++r;
+  *++c = *++r;
+  *++c = *++r;
+  return ++c;
 }
 // The fastest stoa fuction
 _INLINE static char* s2a(char* c, short i) {
@@ -1372,11 +1372,11 @@ _INLINE static char* u2a(char* c, unsigned int i) {
       *c++ = _c2DigitsLut[u][1];
       i -= u * 10000;
       r = _c4DigitsLut[i];
-      *c++ = r[0];
-      *c++ = r[1];
-      *c++ = r[2];
-      *c++ = r[3];
-      return c;
+      *c = *r;
+      *++c = *++r;
+      *++c = *++r;
+      *++c = *++r;
+      return ++c;
     }
     unsigned int u = static_cast<unsigned int>(i / 10000);
     r = _c4DigitsLut[u];
@@ -1387,11 +1387,11 @@ _INLINE static char* u2a(char* c, unsigned int i) {
     *c++ = r[2];
     *c++ = r[3];
     r = _c4DigitsLut[i];
-    *c++ = r[0];
-    *c++ = r[1];
-    *c++ = r[2];
-    *c++ = r[3];
-    return c;
+    *c = *r;
+    *++c = *++r;
+    *++c = *++r;
+    *++c = *++r;
+    return ++c;
   }
   unsigned int u = static_cast<unsigned int>(i / 1000000);
   r = _c4DigitsLut[u];
@@ -1409,9 +1409,9 @@ _INLINE static char* u2a(char* c, unsigned int i) {
   *c++ = r[2];
   *c++ = r[3];
   r = _c2DigitsLut[i];
-  *c++ = r[0];
-  *c++ = r[1];
-  return c;
+  *c = *r;
+  *++c = *++r;
+  return ++c;
 }
 // The fastest itoa fuction
 _INLINE static char* i2a(char* c, int i) {
@@ -1464,11 +1464,11 @@ _INLINE static char* u64toa(char* c, unsigned long long i) {
     *c++ = r[2];
     *c++ = r[3];
     r = _c4DigitsLut[i];
-    *c++ = r[0];
-    *c++ = r[1];
-    *c++ = r[2];
-    *c++ = r[3];
-    return c;
+    *c = *r;
+    *++c = *++r;
+    *++c = *++r;
+    *++c = *++r;
+    return ++c;
   }
   if (i < 1000000000000ULL) {
     if (i < 10000000000ULL) {
@@ -1508,14 +1508,14 @@ _INLINE static char* u64toa(char* c, unsigned long long i) {
     *c++ = r[2];
     *c++ = r[3];
     r = _c4DigitsLut[i];
-    *c++ = r[0];
-    *c++ = r[1];
-    *c++ = r[2];
-    *c++ = r[3];
-    return c;
+    *c = *r;
+    *++c = *++r;
+    *++c = *++r;
+    *++c = *++r;
+    return ++c;
   }
-  unsigned long long h = i / 1000000000000ULL;
-  i -= h * 1000000000000ULL;
+  unsigned int h = static_cast<unsigned int>(i / 1000000000000ULL);
+  i %= 1000000000000ULL;
   if (h < U32(1e4)) {
     if (h < U32(1e2)) {
       if (h > 9)
@@ -1557,14 +1557,14 @@ _INLINE static char* u64toa(char* c, unsigned long long i) {
   *c++ = r[1];
   *c++ = r[2];
   *c++ = r[3];
-$:h = i / 100000000;
+$:h = static_cast<unsigned int>(i / 100000000);
   r = _c4DigitsLut[h];
   *c++ = r[0];
   *c++ = r[1];
   *c++ = r[2];
   *c++ = r[3];
-  i -= h * 100000000;
-  h = i / 10000;
+  i %= 100000000;
+  h = static_cast<unsigned int>(i / 10000);
   i -= h * 10000;
   r = _c4DigitsLut[h];
   *c++ = r[0];
@@ -1572,11 +1572,11 @@ $:h = i / 100000000;
   *c++ = r[2];
   *c++ = r[3];
   r = _c4DigitsLut[i];
-  *c++ = r[0];
-  *c++ = r[1];
-  *c++ = r[2];
-  *c++ = r[3];
-  return c;
+  *c = *r;
+  *++c = *++r;
+  *++c = *++r;
+  *++c = *++r;
+  return ++c;
 }
 // The fastest i64toa fuction
 _INLINE static char* i64toa(char* c, long long i) {
