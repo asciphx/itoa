@@ -15,7 +15,7 @@
  * version is used to provide a service over a network, the complete source code of
  * the modified version must be made available.
  * 
- * See C++ version for details https://github.com/asciphx/FabCc/blob/main/fc/include/hpp/i2a.hpp
+ * See C++ version for details https://github.com/asciphx/Nod/blob/main/fc/include/hpp/i2a.hpp
  */
 //#include "i2a.h"
 //#include "itoa.hpp"

@@ -18,12 +18,11 @@ cmake --build ./build --config Release
 ```
 ## 特征
 - 无需高版本的c++, 性能会有约100%的提升
-- 无需SSE指令集优化, 在超大整数方面性能有100000%以上的增幅
 - 头文件与源文件分离, 无需过多的内联, 防止编译缓慢
 - ![测试](./test.jpg)
 
 ## 说明
-- C++版本详见[https://gitee.com/asciphx/FabCc/blob/main/fc/include/hpp/i2a.hpp](https://gitee.com/asciphx/FabCc/blob/main/fc/include/hpp/i2a.hpp)
+- C++版本详见[https://gitee.com/asciphx/Nod/blob/main/fc/include/hpp/i2a.hpp](https://gitee.com/asciphx/Nod/blob/main/fc/include/hpp/i2a.hpp)
 
 ## 详情(c++版本, Linux)
 预测, 综合性能对比SSE大概如下
